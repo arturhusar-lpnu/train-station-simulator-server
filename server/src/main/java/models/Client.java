@@ -14,7 +14,6 @@ import java.util.Set;
 // Have a Position on the map I guess should be moved to an UI class
 //================================================================================
 
-
 @RequiredArgsConstructor
 @Getter
 @Setter

@@ -23,3 +23,4 @@ public abstract class PrivilegeCategory {
         return "PrivilegeCategory [priority=" + priority + ", type=" + type.name() + "]";
     }
 }
+

@@ -25,3 +25,4 @@ public abstract class PrivilegeCategoryDecorator extends PrivilegeCategory {
         return "PrivilegeCategory [priority=" + getPriority() + ", type=" + getName() + "]";
     }
 }
+

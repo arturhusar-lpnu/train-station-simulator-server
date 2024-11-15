@@ -16,4 +16,3 @@ public class MilitaryPrivilege extends PrivilegeCategoryDecorator{
         return super.getPriority() * 2;
     }
 }
-

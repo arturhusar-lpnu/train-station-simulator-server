@@ -20,3 +20,4 @@ public class BeneficiaryPrivilege extends PrivilegeCategoryDecorator {
         return super.toString();
     }
 }
+

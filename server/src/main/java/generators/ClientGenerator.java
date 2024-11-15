@@ -7,7 +7,6 @@ import strategy.tickets.TicketsGenerationStrategy;
 import strategy.time.FixedTimeStrategy;
 import strategy.time.TimeGenerationStrategy;
 
-
 @Setter
 public class ClientGenerator {
     private TimeGenerationStrategy timeGenerationStrategy;

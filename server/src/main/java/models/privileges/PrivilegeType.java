@@ -6,3 +6,4 @@ public enum PrivilegeType {
     Military,
     Beneficiary,// common privilege
 }
+

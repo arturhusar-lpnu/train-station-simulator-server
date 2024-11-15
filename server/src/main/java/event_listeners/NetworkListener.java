@@ -6,7 +6,6 @@ package event_listeners;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-
 @RequiredArgsConstructor
 public class NetworkListener {
     private final SimpMessagingTemplate messagingTemplate;
