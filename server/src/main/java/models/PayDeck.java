@@ -60,8 +60,8 @@ public class PayDeck {
                 return;
             }
 
-            Thread.sleep(ticketsToAdd * 1000); // simulate tickets creation
             isAvailable.set(false);
+            Thread.sleep(ticketsToAdd * 1000); // simulate tickets creation
         } catch (InterruptedException e) {
             e.printStackTrace();
             //If a pay deck is broken client should have the highest priority хз рома таке написав як то зробити чесним я хз
