@@ -5,5 +5,9 @@ public class SimulatorApp {
         TicketSystem ts = TicketSystem.getInstance();
         ts.startSystem();
     }
+    private static int AddOne() {
+        //Volodya sonce
+        return 1;
+    }
 }
 
