@@ -18,3 +18,6 @@
 - test/branch-name - for testing
 - docs/branch-name - for documentation
 - config/branch-name - for configuration
+
+Дошка позору:
+- Костя. Причина: зміна файлу README.md без дозволу.
