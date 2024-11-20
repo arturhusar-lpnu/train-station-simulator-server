@@ -1,46 +1,36 @@
 package events;
 
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
 import models.Client;
 import models.PayDeck;
-import models.Position;
+
 
 public class ClientEvents {
-    @RequiredArgsConstructor
-    public static class ClientCreatedEvent extends Event {
-        private final Client client;
-        public Client getClient() {
-            return client;
+
+    @Getter
+    public static class ClientCreatedEvent extends ClientEvent {
+        public ClientCreatedEvent(Client client) {
+            super(client);
         }
     }
-    @RequiredArgsConstructor
-    public static class ClientMovedEvent extends Event {
-        private final Client client;
-        private final Position oldPosition;
-        private final Position newPosition;
-    }
+//    @Getter
+//    public static class ClientEnteredQueueEvent extends ClientEvent {
+//        public final PayDeck servingDeck;
+//        public ClientEnteredQueueEvent(Client client, PayDeck servingDeck) {
+//            super(client);
+//            this.servingDeck = servingDeck;
+//        }
+//    }
 
-    @RequiredArgsConstructor
-    public static class ClientQueuedEvent extends Event {
-        private final Client client;
-        private final PayDeck payDesk;
-    }
-
-    @RequiredArgsConstructor
-    public static class ClientServiceStartedEvent extends Event {
-        private final Client client;
-        private final PayDeck payDesk;
-    }
-
-    @RequiredArgsConstructor
-    public static class ClientServiceFinishedEvent extends Event {
-        private final Client client;
+    @Getter
+    public static class ClientServedEvent extends ClientEvent {
         private final PayDeck payDeck;
         private final boolean successful;
-    }
 
-    @RequiredArgsConstructor
-    public static class ClientExitedEvent extends Event {
-        private final Client client;
+        public ClientServedEvent(Client client, final PayDeck payDeck, final boolean successful) {
+            super(client);
+            this.payDeck = payDeck;
+            this.successful = successful;
+        }
     }
 }

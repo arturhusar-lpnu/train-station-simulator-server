@@ -10,12 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-@RequiredArgsConstructor
-@Getter
-abstract class PayDeskEvent extends Event {
-    private final PayDeck payDeck;
-}
-
 public class PayDeskEvents {
 
     @Getter
@@ -31,11 +25,11 @@ public class PayDeskEvents {
     }
 
     @Getter
-    public static class PayDeskClosedEvent extends PayDeskEvent {
+    public static class PayDeskBusyEvent extends PayDeskEvent {
         private final int remainingClientsCount;
         private final List<Client> remainingClients;
 
-        public PayDeskClosedEvent(PayDeck payDeck, List<Client> remainingClients) {
+        public PayDeskBusyEvent(PayDeck payDeck, List<Client> remainingClients) {
             super(payDeck);
             this.remainingClients = new ArrayList<>(remainingClients);
             this.remainingClientsCount = remainingClients.size();

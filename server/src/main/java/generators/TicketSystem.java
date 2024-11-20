@@ -20,7 +20,7 @@ public class TicketSystem {
     private PayDeck reservedPayDeck;
     private ClientGenerator clientGenerator;
     private List<PayDeck> payDecks;
-    private StationRoom roomMap;
+//    private StationRoom roomMap;
     private Timer timer;
     private LocalTime startOfWorkingDay;
     private LocalTime endOfWorkingDay;
@@ -32,7 +32,7 @@ public class TicketSystem {
         this.reservedPayDeck = reservedPayDeck;
         this.clientGenerator = clientGenerator;
         this.payDecks = payDecks;
-        this.roomMap = roomMap;
+//        this.roomMap = roomMap;
         this.timer = timer;
         this.startOfWorkingDay = startOfWorkingDay;
         this.endOfWorkingDay = endOfWorkingDay;
