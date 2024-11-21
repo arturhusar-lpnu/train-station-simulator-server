@@ -1,5 +1,5 @@
 ### Commits prefixes
-
+  Change the file by Kostya
 - [feat] - new feature, that is added to an app
 - [fix] - bugfixing
 - [style] - changes related to code style
@@ -18,3 +18,6 @@
 - test/branch-name - for testing
 - docs/branch-name - for documentation
 - config/branch-name - for configuration
+
+Дошка позору:
+- Костя. Причина: зміна файлу README.md без дозволу.
