@@ -9,5 +9,9 @@ public class SimulationEvents {
         }
     }
 
-    public static class SimulationBreak
+    public static class SimulationBreakEvent extends SimulationEvent {
+        public SimulationBreakEvent(TicketSystem ticketSystem) {
+            super(ticketSystem);
+        }
+    }
 }

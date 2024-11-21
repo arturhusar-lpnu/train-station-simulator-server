@@ -24,7 +24,7 @@ public class ClientGenerator {
     }
     public ClientGenerator() {
         this.timeGenerationStrategy = new FixedTimeStrategy(1);
-        this.privilegeGenerator = new PrivilegeGenerator();
+        this.privilegeGenerator = new PrivilegeGenerator(0.1, 0.05, 1, 3);
         this.ticketsGenerationStrategy = new FixedTicketsStrategy(2);
 
         this.currentThread = new Thread(this::generateClients);

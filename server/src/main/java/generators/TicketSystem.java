@@ -1,5 +1,6 @@
 package generators;
 
+import events.EventDispatcher;
 import lombok.Getter;
 import lombok.Setter;
 import models.PayDeck;
@@ -17,25 +18,29 @@ import java.util.Timer;
 @Getter
 @Setter
 public class TicketSystem {
-    private PayDeck reservedPayDeck;
+    private PayDeckSystem payDeckSystem;
     private ClientGenerator clientGenerator;
     private List<PayDeck> payDecks;
-//    private StationRoom roomMap;
+    private StationRoom roomMap;
     private Timer timer;
     private LocalTime startOfWorkingDay;
     private LocalTime endOfWorkingDay;
+    private EventDispatcher eventDispatcher;
+    private ClientMoveSystem clientMoveSystem;
     private static TicketSystem instance;
 
-    private TicketSystem(PayDeck reservedPayDeck, ClientGenerator clientGenerator,
+    private TicketSystem(PayDeckSystem payDeckSystem, ClientGenerator clientGenerator,
                          List<PayDeck> payDecks, StationRoom roomMap, Timer timer,
-                         LocalTime startOfWorkingDay, LocalTime endOfWorkingDay) {
-        this.reservedPayDeck = reservedPayDeck;
+                         LocalTime startOfWorkingDay, LocalTime endOfWorkingDay,EventDispatcher eventDispatcher, ClientMoveSystem clientMoveSystem) {
+        this.payDeckSystem = payDeckSystem;
         this.clientGenerator = clientGenerator;
         this.payDecks = payDecks;
-//        this.roomMap = roomMap;
+        this.roomMap = roomMap;
         this.timer = timer;
         this.startOfWorkingDay = startOfWorkingDay;
         this.endOfWorkingDay = endOfWorkingDay;
+        this.eventDispatcher = eventDispatcher;
+        this.clientMoveSystem = clientMoveSystem;
     }
 
     public static TicketSystem getInstance() {
@@ -45,12 +50,12 @@ public class TicketSystem {
         return instance;
     }
 
-    public static TicketSystem getInstance(PayDeck reservedPayDeck, ClientGenerator clientGenerator,
+    public static TicketSystem getInstance(PayDeckSystem payDeckSystem, ClientGenerator clientGenerator,
                                            List<PayDeck> payDecks, StationRoom roomMap, Timer timer,
-                                           LocalTime startOfWorkingDay, LocalTime endOfWorkingDay) {
+                                           LocalTime startOfWorkingDay, LocalTime endOfWorkingDay, EventDispatcher eventDispatcher, ClientMoveSystem clientMoveSystem) {
         if (instance == null) {
-            instance = new TicketSystem(reservedPayDeck, clientGenerator, payDecks, roomMap, timer,
-                    startOfWorkingDay, endOfWorkingDay);
+            instance = new TicketSystem(payDeckSystem, clientGenerator, payDecks, roomMap, timer,
+                    startOfWorkingDay, endOfWorkingDay, eventDispatcher, clientMoveSystem);
         }
         return instance;
     }

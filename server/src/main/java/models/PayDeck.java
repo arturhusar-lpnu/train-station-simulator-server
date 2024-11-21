@@ -16,20 +16,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter
 @Setter
-public class PayDeck {
+public class PayDeck implements Runnable {
     private final int id;
     private final PriorityQueue<Client> clientsQueue;
     private AtomicBoolean isWorking;
-    private  AtomicBoolean isAvailable;
-    private Thread currentThread;
 
     public PayDeck(int id) {
         this.id = id;
         isWorking = new AtomicBoolean(true);
-        isAvailable = new AtomicBoolean(false);
         clientsQueue = new PriorityQueue<>( (c1, c2) -> Integer.compare(calculatePriority(c1), calculatePriority(c2)));
-        currentThread = new Thread(this::serveClient);
-        currentThread.start();
     }
     //================================================================================
     // Допоміжна може можна скоротити
@@ -37,15 +32,17 @@ public class PayDeck {
     private int calculatePriority(Client c) {
         return c.getPrivileges().stream().mapToInt(PrivilegeCategory::getPriority).sum();
     }
+    public void run() {
 
+    }
+
+    public void crash() {
+        isWorking.set(false);
+    }
     //================================================================================
     // thread main task
     //================================================================================
     public void serveClient() {
-        if(!isAvailable.get()) {
-            System.out.println("Busy serving client");
-            return;
-        }
         if(!isWorking.get()) {
             System.out.println("Not working now");
             return;
@@ -60,7 +57,7 @@ public class PayDeck {
                 return;
             }
 
-            isAvailable.set(false);
+//            isAvailable.set(false);
             Thread.sleep(ticketsToAdd * 1000); // simulate tickets creation
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -69,31 +66,11 @@ public class PayDeck {
             client.addPrivilegeCategory(new Interrupted(clientCategory));
         }
     }
-
-    //Triggers on an event
-    public void breakDeck() {
-        this.stop(); // to interrupt the thread
-    }
-
     // Added clients after it is generated and picked a Deck based on Availability якось так
     public void addClient(Client client) {
         synchronized (clientsQueue) {
             clientsQueue.add(client);
             System.out.println("Client added to paydesk queue: " + client);
         }
-    }
-
-    //start the tread again if was interrupted or on event крч ти поняв
-    public void start() {
-        if (currentThread == null || !currentThread.isAlive()) {
-            isWorking.set(true);
-            currentThread = new Thread(this::serveClient);
-            currentThread.start();
-        }
-    }
-
-    public void stop() {
-        isWorking.set(false);
-        currentThread.interrupt();
     }
 }

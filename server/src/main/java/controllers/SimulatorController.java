@@ -6,8 +6,6 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class SimulatorController {
-//    @MessageMapping("/configure")
-//    public void configureSimulation(SimulationConfig config) {}
     @MessageMapping("/start-simulation")
     @SendTo("/topic/simulation-status")
     public void startSimulation() {
