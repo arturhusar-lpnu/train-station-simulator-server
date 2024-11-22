@@ -1,6 +1,7 @@
 package models.privileges;
 
 public enum PrivilegeType {
+    None,
     Beneficiary,
     Military,
     Disabled,

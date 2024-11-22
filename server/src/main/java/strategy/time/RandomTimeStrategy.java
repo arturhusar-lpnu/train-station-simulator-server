@@ -1,13 +1,22 @@
 package strategy.time;
 
-import lombok.RequiredArgsConstructor;
+import exceptions.InvalidArgumentException;
 
+import java.util.List;
 import java.util.Random;
 
-@RequiredArgsConstructor
 public class RandomTimeStrategy implements TimeGenerationStrategy{
     private final long minDelayTime;
     private final long maxDelayTime;
+
+    public RandomTimeStrategy(List<Long> args) throws InvalidArgumentException {
+        if (args == null || args.size() != 2) {
+            throw new InvalidArgumentException("There must be exactly 2 arguments");
+        }
+
+        minDelayTime = args.stream().min(Long::compareTo).get();
+        maxDelayTime = args.stream().max(Long::compareTo).get();
+    }
 
     @Override
     public long getNextGenerationDelay() {
