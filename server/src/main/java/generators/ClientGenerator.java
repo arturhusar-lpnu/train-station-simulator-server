@@ -11,6 +11,7 @@ import strategy.time.TimeGenerationStrategy;
 import java.util.Random;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 // delay поставив в секундах, подумайте, чи норм, чи забрати і в мілісекундах
 @Setter
@@ -18,6 +19,7 @@ public class ClientGenerator {
     private TimeGenerationStrategy timeGenerationStrategy;
     private PrivilegeGenerator privilegeGenerator;
     private TicketsGenerationStrategy ticketsGenerationStrategy;
+    private AtomicInteger clientCounter = new AtomicInteger(0);
     private ScheduledThreadPoolExecutor scheduler;
 
     public ClientGenerator(TimeGenerationStrategy timeGen, PrivilegeGenerator privilegeGen, TicketsGenerationStrategy ticketsGen) {
@@ -31,7 +33,7 @@ public class ClientGenerator {
         var paydecks = TicketSystem.getInstance().getPayDeckSystem().getPayDecks();
         var entries = TicketSystem.getInstance().getRoomMap().getEntries();
         Position startPosition = entries.get(new Random().nextInt(0, entries.size()));
-        Client client = new Client(0,
+        Client client = new Client(clientCounter.incrementAndGet(),
                 ticketsGenerationStrategy.getTickets(),
                 startPosition,
                 privilegeGenerator.getPrivilege());
