@@ -9,9 +9,11 @@ import models.StationRoom;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Timer;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 
 //================================================================================
-// Code smells
+// Code smells and smells good ;)
 // ril
 //================================================================================
 
@@ -20,7 +22,6 @@ import java.util.Timer;
 public class TicketSystem {
     private PayDeckSystem payDeckSystem;
     private ClientGenerator clientGenerator;
-    private List<PayDeck> payDecks;
     private StationRoom roomMap;
     private Timer timer;
     private LocalTime startOfWorkingDay;
@@ -28,35 +29,39 @@ public class TicketSystem {
     private EventDispatcher eventDispatcher;
     private ClientMoveSystem clientMoveSystem;
     private static TicketSystem instance;
+    private static ReentrantLock lock = new ReentrantLock();
+    private AtomicBoolean isFirstTime = new AtomicBoolean(true);
 
-    private TicketSystem(PayDeckSystem payDeckSystem, ClientGenerator clientGenerator,
-                         List<PayDeck> payDecks, StationRoom roomMap, Timer timer,
-                         LocalTime startOfWorkingDay, LocalTime endOfWorkingDay,EventDispatcher eventDispatcher, ClientMoveSystem clientMoveSystem) {
-        this.payDeckSystem = payDeckSystem;
-        this.clientGenerator = clientGenerator;
-        this.payDecks = payDecks;
-        this.roomMap = roomMap;
-        this.timer = timer;
-        this.startOfWorkingDay = startOfWorkingDay;
-        this.endOfWorkingDay = endOfWorkingDay;
-        this.eventDispatcher = eventDispatcher;
-        this.clientMoveSystem = clientMoveSystem;
+    private TicketSystem(TicketSystemConfig config) {
+        this.payDeckSystem = config.getPayDeckSystem();
+        this.clientGenerator = config.getClientGenerator();
+        this.roomMap = config.getRoomMap();
+        this.timer = config.getTimer();
+        this.startOfWorkingDay = config.getStartOfWorkingDay();
+        this.endOfWorkingDay = config.getEndOfWorkingDay();
+        this.eventDispatcher = config.getEventDispatcher();
+        this.clientMoveSystem = config.getClientMoveSystem();
     }
 
     public static TicketSystem getInstance() {
+        lock.lock();
+
         if (instance == null) {
-            throw new IllegalStateException("TicketSystem is not initialized. Use getInstance with parameters first.");
+            throw new IllegalStateException("TicketSystem is not initialized. Use getInstance with parameter first.");
         }
+
+        lock.unlock();
         return instance;
     }
 
-    public static TicketSystem getInstance(PayDeckSystem payDeckSystem, ClientGenerator clientGenerator,
-                                           List<PayDeck> payDecks, StationRoom roomMap, Timer timer,
-                                           LocalTime startOfWorkingDay, LocalTime endOfWorkingDay, EventDispatcher eventDispatcher, ClientMoveSystem clientMoveSystem) {
+    public static TicketSystem getInstance(TicketSystemConfig config) {
+        lock.lock();
+
         if (instance == null) {
-            instance = new TicketSystem(payDeckSystem, clientGenerator, payDecks, roomMap, timer,
-                    startOfWorkingDay, endOfWorkingDay, eventDispatcher, clientMoveSystem);
+            instance = new TicketSystem(config);
         }
+
+        lock.unlock();
         return instance;
     }
     public void startClientGenerator() {
