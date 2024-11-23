@@ -2,8 +2,6 @@ package models;
 
 import lombok.Getter;
 import lombok.Setter;
-import models.privileges.PrivilegeCategory;
-import models.privileges.decorators.Interrupted;
 
 import java.util.PriorityQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -30,7 +28,7 @@ public class PayDeck implements Runnable {
     // Допоміжна може можна скоротити
     //================================================================================
     private int calculatePriority(Client c) {
-        return c.getPrivileges().stream().mapToInt(PrivilegeCategory::getPriority).sum();
+       return 0; //c.getPrivileges().stream().mapToInt(PrivilegeCategory::getPriority).sum();
     }
     public void run() {
 
@@ -62,8 +60,8 @@ public class PayDeck implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
             //If a pay deck is broken client should have the highest priority хз рома таке написав як то зробити чесним я хз
-            PrivilegeCategory clientCategory = client.getPrivileges().stream().findFirst().orElse(null); // Check later
-            client.addPrivilegeCategory(new Interrupted(clientCategory));
+//            PrivilegeCategory clientCategory = client.getPrivileges().stream().findFirst().orElse(null); // Check later
+//            client.addPrivilegeCategory(new Interrupted(clientCategory));
         }
     }
     // Added clients after it is generated and picked a Deck based on Availability якось так

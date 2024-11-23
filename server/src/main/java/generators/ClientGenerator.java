@@ -38,6 +38,8 @@ public class ClientGenerator {
                 startPosition,
                 privilegeGenerator.getPrivilege());
 
+        moveSystem.addClient(paydecks, client);
+
         scheduler.schedule(this::generateClient,
                 timeGenerationStrategy.getNextGenerationDelay(),
                 TimeUnit.SECONDS);
