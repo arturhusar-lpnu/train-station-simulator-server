@@ -27,7 +27,7 @@
 | **refactor/branch-name** | Для рефакторингу 🔄   | 🛠💡🔧         |
 | **test/branch-name**     | Для тестування ✅| ✅🧪🔍        |
 | **docs/branch-name**     | Для оновлень документації 📚 | 📚📝✨         |
-| **config/branch-name**   | Зміни в процесах CI/CD ⚙️   | ⚙️🔧🔌         |
+| **config/branch-name**   | Зміни в конфігураційних файлах ⚙️🔧   | ⚙️🔧🔌         |
 
 ---
 
