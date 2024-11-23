@@ -1,5 +1,6 @@
 package generators;
 
+import exceptions.InvalidArgumentException;
 import models.privileges.PrivilegeType;
 
 import java.util.Random;
@@ -7,7 +8,11 @@ import java.util.Random;
 public class PrivilegeGenerator {
     private double probabilityOfPrivilege;
 
-    public PrivilegeGenerator(double probabilityOfPrivilege) {
+    public PrivilegeGenerator(double probabilityOfPrivilege) throws InvalidArgumentException {
+        if (probabilityOfPrivilege < 0.0 || probabilityOfPrivilege > 1.0) {
+            throw new InvalidArgumentException("Probability of privilege must be between 0.0 and 1.0");
+        }
+
         this.probabilityOfPrivilege = probabilityOfPrivilege;
     }
 
