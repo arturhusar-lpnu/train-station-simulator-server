@@ -1,10 +1,9 @@
 package event_dispather.WebNotifier;
 
 import event_dispather.EventObserver;
-import event_listeners.WebListener;
+import event_listeners.web.WebListener;
 import events.Event;
 import events.EventListener;
-import exceptions.InvalidArgumentException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
