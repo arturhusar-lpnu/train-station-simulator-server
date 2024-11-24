@@ -6,7 +6,7 @@ import events.*;
 import java.io.File;
 
 public abstract class LogListener implements EventListener {
-    private final File log;
+    protected final File log;
 
     public LogListener(String fileName) {
         this.log = new File(fileName);
