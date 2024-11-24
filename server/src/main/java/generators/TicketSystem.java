@@ -1,5 +1,7 @@
 package generators;
 
+import event_dispather.EventLogger.EventLogger;
+import event_dispather.WebNotifier.WebNotifier;
 import lombok.Getter;
 import lombok.Setter;
 import models.StationRoom;
@@ -23,7 +25,9 @@ public class TicketSystem {
     private Timer timer;
     private LocalTime startOfWorkingDay;
     private LocalTime endOfWorkingDay;
-    private EventDispatcher eventDispatcher;
+    //private EventDispatcher eventDispatcher;
+    private WebNotifier webNotifier;
+    private EventLogger eventLogger;
     private ClientMoveSystem clientMoveSystem;
     private static TicketSystem instance;
     private static ReentrantLock lock = new ReentrantLock();
@@ -36,7 +40,9 @@ public class TicketSystem {
         this.timer = config.getTimer();
         this.startOfWorkingDay = config.getStartOfWorkingDay();
         this.endOfWorkingDay = config.getEndOfWorkingDay();
-        this.eventDispatcher = config.getEventDispatcher();
+//        this.eventDispatcher = config.getEventDispatcher(); Хз ніби так краще буде, потім глянете
+        this.webNotifier = config.getWebNotifier();
+        this.eventLogger = config.getEventLogger();
         this.clientMoveSystem = config.getClientMoveSystem();
     }
 

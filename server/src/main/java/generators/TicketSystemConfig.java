@@ -1,5 +1,7 @@
 package generators;
 
+import event_dispather.EventLogger.EventLogger;
+import event_dispather.WebNotifier.WebNotifier;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import models.StationRoom;
@@ -16,6 +18,8 @@ public class TicketSystemConfig {
     private Timer timer;
     private LocalTime startOfWorkingDay;
     private LocalTime endOfWorkingDay;
-    private EventDispatcher eventDispatcher;
+//    private EventDispatcher eventDispatcher;
+    private WebNotifier webNotifier;
+    private EventLogger eventLogger;
     private ClientMoveSystem clientMoveSystem;
 }
