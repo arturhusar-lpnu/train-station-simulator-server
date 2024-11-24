@@ -1,12 +1,14 @@
 package events;
 
+import lombok.Getter;
 import models.Client;
 import models.Position;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-class MoveEvent implements Event {
+@Getter
+public class MoveEvent implements Event {
     private Client client;
     private LocalDateTime startTime;
     private LocalDateTime endTime;

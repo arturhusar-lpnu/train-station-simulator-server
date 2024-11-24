@@ -92,4 +92,7 @@ public class TicketSystem {
         startPayDecks();
         stopTimer();
     }
+    public void stopSystem() {
+
+    }
 }

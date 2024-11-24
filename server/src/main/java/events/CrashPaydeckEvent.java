@@ -1,10 +1,12 @@
 package events;
 
+import lombok.Getter;
 import models.PayDeck;
 
 import java.time.LocalDateTime;
 
-class CrashPaydeckEvent implements Event {
+@Getter
+public class CrashPaydeckEvent implements Event {
     private PayDeck crashedPaydeck;
     private LocalDateTime startTime;
 
