@@ -8,9 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import event_listeners.EventListener;
 
 public class WebNotifier implements EventObserver {
-    private Map<String, List<WebListener>> listeners;
+    private final Map<String, List<WebListener>> listeners;
 
     public WebNotifier() {
         listeners = new HashMap<>();

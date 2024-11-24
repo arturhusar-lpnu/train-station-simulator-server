@@ -3,6 +3,7 @@ package event_dispather;
 import events.Event;
 
 import java.util.List;
+import event_listeners.EventListener;
 
 public class EventDispatcher implements EventObserver {
     private List<EventObserver> observers;
