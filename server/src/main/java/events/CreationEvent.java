@@ -1,10 +1,12 @@
 package events;
 
+import lombok.Getter;
 import models.Client;
 import models.PayDeck;
 import java.time.LocalDateTime;
 
-class CreationEvent implements Event {
+@Getter
+public class CreationEvent implements Event {
     private Client createdClient;
     private LocalDateTime time;
     private PayDeck choosedPaydeck;

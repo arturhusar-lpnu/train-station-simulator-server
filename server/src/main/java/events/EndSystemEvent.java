@@ -2,7 +2,7 @@ package events;
 
 import generators.TicketSystem;
 
-class EndSystemEvent implements Event {
+public class EndSystemEvent implements Event {
     private TicketSystem system;
 
     public EndSystemEvent(TicketSystem system) {

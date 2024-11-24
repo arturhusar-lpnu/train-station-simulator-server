@@ -1,11 +1,13 @@
 package events;
 
+import lombok.Getter;
 import models.Client;
 import models.PayDeck;
 
 import java.sql.Time;
 
-class ServiceEvent implements Event {
+@Getter
+public class ServiceEvent implements Event {
     private Client client;
     private Time startTime;
     private Time endTime;
