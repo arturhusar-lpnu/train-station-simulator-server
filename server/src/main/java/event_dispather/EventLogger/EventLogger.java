@@ -1,36 +1,36 @@
-package event_dispather.WebNotifier;
+package event_dispather.EventLogger;
 
 import event_dispather.EventObserver;
-import event_listeners.web.WebListener;
+import event_listeners.EventListener;
+import event_listeners.log.LogListener;
 import events.Event;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import event_listeners.EventListener;
 
-public class WebNotifier implements EventObserver {
-    private final Map<String, List<WebListener>> listeners;
+public class EventLogger implements EventObserver {
+    private final Map<String, List<LogListener>> listeners;
 
-    public WebNotifier() {
+    public EventLogger() {
         listeners = new HashMap<>();
     }
 
     @Override
     public void subscribe(Event event, EventListener listener) {
         if (event == null) {
-           throw new IllegalArgumentException("Invalid even");
+            throw new IllegalArgumentException("Invalid even");
         }
         if(listener == null) {
             throw new IllegalArgumentException("Invalid listener");
         }
         listeners.putIfAbsent(event.getType(), new ArrayList<>());
 
-        if (listener instanceof WebListener) {
-            listeners.get(event.getType()).add((WebListener) listener);
+        if (listener instanceof LogListener) {
+            listeners.get(event.getType()).add((LogListener) listener);
         } else {
-            throw new IllegalArgumentException("Listener must be of type WebListener");
+            throw new IllegalArgumentException("Listener must be of type LogListener");
         }
     }
 
@@ -43,11 +43,11 @@ public class WebNotifier implements EventObserver {
             throw new IllegalArgumentException("Invalid listener");
         }
 
-        if (!(listener instanceof WebListener)) {
-            throw new IllegalArgumentException("Listener must be of type WebListener");
+        if (!(listener instanceof LogListener)) {
+            throw new IllegalArgumentException("Listener must be of type LogListener");
         }
 
-        List<WebListener> eventListeners = listeners.get(event.getType());
+        List<LogListener> eventListeners = listeners.get(event.getType());
         if (eventListeners != null) {
             eventListeners.remove(listener);
         }
@@ -59,9 +59,9 @@ public class WebNotifier implements EventObserver {
             throw new IllegalArgumentException("Invalid event passed");
         }
 
-        List<WebListener> eventListeners = this.listeners.get(event.getType());
+        List<LogListener> eventListeners = this.listeners.get(event.getType());
         if(eventListeners != null) {
-            for(WebListener listener : eventListeners) {
+            for(LogListener listener : eventListeners) {
                 listener.update(event);
             }
         }

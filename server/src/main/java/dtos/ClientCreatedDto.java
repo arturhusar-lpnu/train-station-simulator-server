@@ -10,5 +10,5 @@ import java.util.List;
 // Client Objects sent to front end
 //================================================================================
 
-public record ClientDTO(Client client, PayDeck payDeck, List<Position> movements) {
+public record ClientCreatedDto(Client client) {
 }

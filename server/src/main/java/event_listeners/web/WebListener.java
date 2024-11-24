@@ -11,6 +11,7 @@ public abstract class WebListener implements EventListener {
         this.messagingTemplate = messagingTemplate;
     }
 
+    @Override
     public void update(Event event) {
         messagingTemplate.convertAndSend("/topic/event", event);
     }

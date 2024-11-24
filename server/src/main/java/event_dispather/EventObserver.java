@@ -4,7 +4,7 @@ import events.Event;
 import event_listeners.EventListener;
 
 public interface EventObserver {
-    void subscribe(String eventType, EventListener listener);
-    void unsubscribe(String eventType, EventListener listener);
+    void subscribe(Event event, EventListener listener);
+    void unsubscribe(Event event, EventListener listener);
     void notify(Event event);
 }
