@@ -1,6 +1,5 @@
 package generators;
 
-import events.EventDispatcher;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import models.StationRoom;

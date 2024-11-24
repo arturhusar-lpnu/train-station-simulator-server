@@ -1,13 +1,10 @@
 package generators;
 
-import events.EventDispatcher;
 import lombok.Getter;
 import lombok.Setter;
-import models.PayDeck;
 import models.StationRoom;
 
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Timer;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;

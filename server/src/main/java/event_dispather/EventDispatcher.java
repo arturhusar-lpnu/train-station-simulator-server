@@ -1,7 +1,6 @@
 package event_dispather;
 
 import events.Event;
-import events.EventListener;
 
 import java.util.List;
 
