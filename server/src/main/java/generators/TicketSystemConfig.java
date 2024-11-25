@@ -23,3 +23,18 @@ public class TicketSystemConfig {
     private EventLogger eventLogger;
     private ClientMoveSystem clientMoveSystem;
 }
+
+// CLIENT DTO
+/*  TimeGenerationStrategy
+TicketsGenerationStrategy
+*   StationMap : private int width;
+    private int length;
+
+    private List<Position> entries;
+    private List<Position> exits;
+
+    Map created from width and length
+    В конструкторі конфігу підключити івенти і їх слухачів, створити payDeckSystem, clientMoveSystem,
+
+* */
+

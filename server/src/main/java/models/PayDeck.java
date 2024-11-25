@@ -30,8 +30,18 @@ public class PayDeck implements Runnable {
     private int calculatePriority(Client c) {
        return 0; //c.getPrivileges().stream().mapToInt(PrivilegeCategory::getPriority).sum();
     }
-    public void run() {
 
+
+    // + Генератор поломки каси + кидаєм івент про поломку
+    public void run() {
+        //кидає івент почала обробку
+        try {
+            Thread.sleep(client_tickets_count  * 1000);
+            queue.remove(client);
+            // кидає івент про успішну обробку
+        } catch (Exception e) {
+            // записуєм в логер
+        }
     }
 
     public void crash() {
