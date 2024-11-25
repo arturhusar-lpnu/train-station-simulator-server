@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 // delay поставив в секундах, подумайте, чи норм, чи забрати і в мілісекундах]
 
-// baawls
+// baawls nibber
 @Setter
 public class ClientGenerator {
     private TimeGenerationStrategy timeGenerationStrategy;
