@@ -13,7 +13,9 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-// delay поставив в секундах, подумайте, чи норм, чи забрати і в мілісекундах
+// delay поставив в секундах, подумайте, чи норм, чи забрати і в мілісекундах]
+
+// baawls
 @Setter
 public class ClientGenerator {
     private TimeGenerationStrategy timeGenerationStrategy;
