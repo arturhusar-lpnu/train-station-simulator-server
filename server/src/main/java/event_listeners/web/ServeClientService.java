@@ -1,5 +1,6 @@
 package event_listeners.web;
 
+import events.CrashPaydeckEvent;
 import events.ModifiedQueueEvent;
 import events.ServiceEvent;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,11 @@ public class ServeClientService {
 
     public void sendEndedServicingEvent(ServiceEvent serviceEvent) { //SeviceEndedDto
         messagingTemplate.convertAndSend("/topic/stoped-serving-client", serviceEvent);
+    }
+
+    public void sendInterruptedServing(CrashPaydeckEvent interuptedEvent) {
+        messagingTemplate.convertAndSend("/topic/pay-deck-crush", interuptedEvent);
+
     }
 
     public void sendModifiedQueueEvent(ModifiedQueueEvent modifiedQueueEvent) {

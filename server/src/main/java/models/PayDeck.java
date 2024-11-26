@@ -21,12 +21,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class PayDeck {
     private final int id;
     private final PriorityQueue<Client> clientsQueue;
-    private AtomicBoolean isWorking;
+    private boolean isWorking;
     private ServeClientService serveClientService;
 
     public PayDeck(int id, ServeClientService serveClientService) {
         this.id = id;
-        isWorking = new AtomicBoolean(true);
+        isWorking = true;
         clientsQueue = new PriorityQueue<>( (c1, c2) -> Integer.compare(calculatePriority(c1), calculatePriority(c2)));
         this.serveClientService = serveClientService;
     }
@@ -38,7 +38,7 @@ public class PayDeck {
     }
 
     public void crash() {
-        isWorking.set(false);
+        isWorking = false;
     }
     //================================================================================
     // thread main task

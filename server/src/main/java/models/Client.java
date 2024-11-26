@@ -20,14 +20,9 @@ import models.privileges.PrivilegeType;
 public class Client {
     private final int id;
     private final int ticketsToBuy;
-    private Position currPosition;
     PrivilegeType privilege;
 
     public void interrupt() {
         privilege = PrivilegeType.Interrupted;
-    }
-
-    public void setPosition(Position position) {
-        this.currPosition = position;
     }
 }

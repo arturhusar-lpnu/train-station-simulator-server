@@ -1,7 +1,10 @@
 package models;
 
 import event_listeners.web.ServeClientService;
+import events.CrashPaydeckEvent;
 import events.ServiceEvent;
+
+import java.time.LocalDateTime;
 
 
 public class ServeClientTask implements Runnable {
@@ -31,9 +34,13 @@ public class ServeClientTask implements Runnable {
 
             payDeck.getClientsQueue().remove(client);
             //New Serving Ended event
-            serveClientService.sendServiceEvent(serviceEvent);
-        } catch (Exception e) {
-
+            serveClientService.sendEndedServicingEvent(serviceEvent);
+        } catch (InterruptedException e) {
+            System.out.println("Task interrupted for PayDeck: " + payDeck.getId());
+            payDeck.setWorking(false);
+            client.interrupt();
+            CrashPaydeckEvent crashPaydeckEvent = new CrashPaydeckEvent(payDeck, client, LocalDateTime.now());
+            serveClientService.sendInterruptedServing(crashPaydeckEvent);
         }
     }
 }

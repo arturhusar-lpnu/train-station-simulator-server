@@ -11,6 +11,7 @@ import strategy.tickets.TicketsGenerationStrategy;
 import strategy.time.FixedTimeStrategy;
 import strategy.time.TimeGenerationStrategy;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -42,15 +43,11 @@ public class ClientGenerator {
 
     private void generateClient() {
         var ticketSystem = TicketSystem.getInstance();
-        var moveSystem = ticketSystem.getClientMoveSystem();
         var paydecks = ticketSystem.getPayDeckSystem().getPayDecks();
-        var entries = ticketSystem.getRoomMap().getEntries();
 
-        Position startPosition = entries.get(new Random().nextInt(0, entries.size()));
         Client client = new Client(
                 clientCounter.incrementAndGet(),
                 ticketsGenerationStrategy.getTickets(),
-                startPosition,
                 privilegeGenerator.getPrivilege()
         );
 
@@ -58,8 +55,8 @@ public class ClientGenerator {
         clients.add(client);
         PayDeck selectedPayDeck = PayDeckChooseSystem.choosePaydeck(paydecks, client);
 
-        //CreationEvent creationEvent = new CreationEvent(client);
-        //clientCreationService.sendClientCreatedEvent();
+        CreationEvent creationEvent = new CreationEvent(client, LocalDateTime.now(), selectedPayDeck);
+        clientCreationService.sendClientCreatedEvent(creationEvent);
 
         scheduler.schedule(this::generateClient,
                 timeGenerationStrategy.getNextGenerationDelay(),
