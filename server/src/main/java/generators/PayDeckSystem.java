@@ -24,6 +24,9 @@ public class PayDeckSystem {
         this.reservedPayDeck = reservedPayDeck;
         threadPools = Executors.newFixedThreadPool(threadPoolSize);
     }
+    public void paydeckServeClient(PayDeck payDeck) {
+        threadPools.execute(payDeck);
+    }
 
     public void addClient(int id, Client client) {
         payDecks.get(id).addClient(client);

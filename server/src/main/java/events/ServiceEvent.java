@@ -8,24 +8,17 @@ import java.sql.Time;
 
 @Getter
 public class ServiceEvent implements Event {
-    private Client client;
-    private Time startTime;
-    private Time endTime;
-    private PayDeck choosedPaydeck;
-    private int ticketsCount;
+    private int payDeckId;
+    private long servingTime;
 
-    public ServiceEvent(Client client, Time startTime, Time endTime,
-                        PayDeck choosedPaydeck, int ticketsCount) {
-        this.client = client;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.choosedPaydeck = choosedPaydeck;
-        this.ticketsCount = ticketsCount;
+    public ServiceEvent(int payDeckId, long servingTime) {
+        this.payDeckId = payDeckId;
+        this.servingTime = servingTime;
     }
 
     @Override
     public String convert() {
-        return String.format("Service: Client=%s, Start=%s, End=%s, Paydeck=%s, Tickets=%d",
-                client, startTime, endTime, choosedPaydeck, ticketsCount);
+        return String.format("Service: PayDeckId=%d, ServingTime=%d",
+                payDeckId, servingTime);
     }
 }

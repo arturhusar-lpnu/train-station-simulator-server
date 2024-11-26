@@ -1,7 +1,9 @@
 package controllers;
 
+import generators.PayDeckSystem;
 import generators.TicketSystem;
 import generators.TicketSystemConfig;
+import models.PayDeck;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -16,6 +18,12 @@ public class SimulatorController {
 
         ticketSystem = TicketSystem.getInstance(config);
         ticketSystem.startSystem();
+    }
+
+    @MessageMapping("/client-reached-deck")
+    public void onClientReachedDeck(@Payload final PayDeck paydeck) {
+        PayDeckSystem pds = ticketSystem.getPayDeckSystem();
+        pds.paydeckServeClient(paydeck);
     }
 
     @MessageMapping("/end-simulation")
