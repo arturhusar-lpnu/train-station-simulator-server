@@ -2,7 +2,6 @@ package models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import models.privileges.PrivilegeType;
 
 import java.util.UUID;

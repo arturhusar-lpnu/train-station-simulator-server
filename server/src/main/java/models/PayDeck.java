@@ -31,19 +31,12 @@ public class PayDeck {
         this.serveClientService = serveClientService;
     }
 
-    //================================================================================
-    // Допоміжна може можна скоротити
-    //================================================================================
-
     public void crash() {
         isWorking = false;
     }
     public void recover() {
         isWorking = true;
     }
-    //================================================================================
-    // thread main task
-    //================================================================================
 
     public void addClient(Client client) {
         clientsQueue.offer(client);

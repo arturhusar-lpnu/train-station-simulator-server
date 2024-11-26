@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class ServiceEvent implements Event {
-    private String payDeckId;
-    private long servingTime;
+    private final String payDeckId;
+    private final long servingTime;
 
     public ServiceEvent(String payDeckId, long servingTime) {
         this.payDeckId = payDeckId;

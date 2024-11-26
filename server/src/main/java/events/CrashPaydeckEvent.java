@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 
 @Getter
 public class CrashPaydeckEvent implements Event {
-    private PayDeck crashedPaydeck;
-    private LocalDateTime startTime;
-    private Client interruptedClient;
+    private final PayDeck crashedPaydeck;
+    private final LocalDateTime startTime;
+    private final Client interruptedClient;
 
     public CrashPaydeckEvent(PayDeck crashedPaydeck, Client interruptedClient, LocalDateTime startTime) {
         this.crashedPaydeck = crashedPaydeck;

@@ -10,11 +10,16 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class CrashPaydeckGenerator {
-    private PayDeckSystem payDeckSystem;
-    private double crashProbability;
+    private final PayDeckSystem payDeckSystem;
+    private final double crashProbability;
     private PayDeck crashedPayDeck;
     private ScheduledThreadPoolExecutor crashThread;
-    private ScheduledExecutorService recoveryThread = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService recoveryThread = Executors.newSingleThreadScheduledExecutor();
+
+    public CrashPaydeckGenerator(PayDeckSystem payDeckSystem,  double crashProbability) {
+        this.payDeckSystem = payDeckSystem;
+        this.crashProbability = crashProbability;
+    }
 
     public void startCrashes() {
         crashThread = new ScheduledThreadPoolExecutor(1);
@@ -45,5 +50,8 @@ public class CrashPaydeckGenerator {
     private void recoverPayDeck() {
         crashedPayDeck.recover();
         payDeckSystem.setRecoveredPayDeck(crashedPayDeck);
+    }
+    public void stopCrashes() {
+        crashThread.shutdown();
     }
 }

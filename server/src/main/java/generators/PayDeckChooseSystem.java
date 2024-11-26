@@ -2,11 +2,8 @@ package generators;
 
 import models.PayDeck;
 import models.Client;
-import models.privileges.PrivilegeType;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 
 public class PayDeckChooseSystem {
 

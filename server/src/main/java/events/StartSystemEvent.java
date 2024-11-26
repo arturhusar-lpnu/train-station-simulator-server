@@ -1,9 +1,6 @@
 package events;
 
-import generators.TicketSystem;
-
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class StartSystemEvent implements Event {

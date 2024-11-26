@@ -18,6 +18,7 @@ public class TicketSystem {
     private PayDeckSystem payDeckSystem;
     private ClientGenerator clientGenerator;
     private SimulationService simulationService;
+    private CrashPaydeckGenerator crashPaydeckGenerator;
     private EventLogger eventLogger;
     private static TicketSystem instance;
     private static ReentrantLock lock = new ReentrantLock();
@@ -26,6 +27,7 @@ public class TicketSystem {
         this.payDeckSystem = config.getPayDeckSystem();
         this.clientGenerator = config.getClientGenerator();
         this.eventLogger = config.getEventLogger();
+        crashPaydeckGenerator = config.getCrashGenerator();
     }
 
     public static TicketSystem getInstance() {
@@ -57,11 +59,18 @@ public class TicketSystem {
         clientGenerator.stopGenerateClients();
     }
 
+    public void startCrashGeneration() { crashPaydeckGenerator.startCrashes();}
+
+
     public void startSystem() {
         if(instance == null) {
             throw new IllegalStateException("TicketSystem is not initialized. Use getInstance with parameters first.");
         }
+        //Client
         startClientGenerator();
+
+        //Crashes
+        startCrashGeneration();
     }
     public void stopSystem() {
         payDeckSystem.shutdown();

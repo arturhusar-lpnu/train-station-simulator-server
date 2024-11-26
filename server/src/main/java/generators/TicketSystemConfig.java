@@ -2,12 +2,8 @@ package generators;
 
 import dtos.ConfigDto;
 import event_dispather.EventLogger.EventLogger;
-import event_dispather.WebNotifier.WebNotifier;
 import exceptions.InvalidArgumentException;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import models.StationRoom;
-import models.WorkingTimer;
 import strategy.tickets.FixedTicketsStrategy;
 import strategy.tickets.RandomTicketsStrategy;
 import strategy.tickets.TicketsGenerationStrategy;
@@ -17,7 +13,7 @@ import strategy.time.TimeGenerationStrategy;
 
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.Timer;
+import java.util.Random;
 
 
 @Getter
@@ -27,6 +23,7 @@ public class TicketSystemConfig {
     private final long durationOfDay;
     private final LocalTime startOfWorkingDay;
     private final LocalTime endOfWorkingDay;
+    private final CrashPaydeckGenerator crashGenerator;
     private EventLogger eventLogger;
 
     public TicketSystemConfig(ConfigDto config) throws InvalidArgumentException {
@@ -50,5 +47,7 @@ public class TicketSystemConfig {
         PrivilegeGenerator privilegeGenerator = new PrivilegeGenerator(0.3);
 
         clientGenerator = new ClientGenerator(timeStrategy, privilegeGenerator, ticketsStrategy);
+        Random rand = new Random();
+        crashGenerator = new CrashPaydeckGenerator(payDeckSystem, 0.25);
     }
 }

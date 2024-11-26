@@ -6,12 +6,10 @@ import generators.PayDeckSystem;
 import generators.TicketSystem;
 import generators.TicketSystemConfig;
 import models.Client;
-import models.PayDeck;
 import models.WorkingTimer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -46,6 +44,6 @@ public class SimulatorController {
     @MessageMapping("/end-simulation")
     public void endSimulation() {
         System.out.println("Received end-simulation message");
-        ticketSystem.stopSystem();
+        workingTimer.stopTimer();
     }
 }
