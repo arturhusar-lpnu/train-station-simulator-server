@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 // baawls nibber
 // baaaaaaaaaaaawls
+//
 @Setter
 public class ClientGenerator {
     private TimeGenerationStrategy timeGenerationStrategy;
