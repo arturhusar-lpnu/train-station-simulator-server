@@ -19,6 +19,7 @@ public class PayDeck implements Runnable {
     private final PriorityQueue<Client> clientsQueue;
     private AtomicBoolean isWorking;
 
+
     public PayDeck(int id) {
         this.id = id;
         isWorking = new AtomicBoolean(true);
@@ -70,5 +71,9 @@ public class PayDeck implements Runnable {
             clientsQueue.add(client);
             System.out.println("Client added to paydesk queue: " + client);
         }
+    }
+
+    public int getQueueSize() {
+        return clientsQueue.size();
     }
 }
