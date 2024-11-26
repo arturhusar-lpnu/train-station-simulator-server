@@ -1,8 +1,8 @@
 package dev.test_generators;
 
-import exceptions.InvalidArgumentException;
-import generators.PrivilegeGenerator;
-import models.privileges.PrivilegeType;
+import com.simulation.exceptions.InvalidArgumentException;
+import com.simulation.generators.PrivilegeGenerator;
+import com.simulation.models.privileges.PrivilegeType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
