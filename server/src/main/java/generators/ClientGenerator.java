@@ -1,5 +1,7 @@
 package generators;
 
+import event_listeners.web.ClientCreationService;
+import events.CreationEvent;
 import lombok.Setter;
 import models.Client;
 import models.Position;
@@ -24,11 +26,12 @@ public class ClientGenerator {
     private TicketsGenerationStrategy ticketsGenerationStrategy;
     private AtomicInteger clientCounter = new AtomicInteger(0);
     private ScheduledThreadPoolExecutor scheduler;
-
-    public ClientGenerator(TimeGenerationStrategy timeGen, PrivilegeGenerator privilegeGen, TicketsGenerationStrategy ticketsGen) {
+    private ClientCreationService clientCreationService;
+    public ClientGenerator(TimeGenerationStrategy timeGen, PrivilegeGenerator privilegeGen, TicketsGenerationStrategy ticketsGen, ClientCreationService clientCreationService) {
         this.timeGenerationStrategy = timeGen;
         this.privilegeGenerator = privilegeGen;
         this.ticketsGenerationStrategy = ticketsGen;
+        this.clientCreationService = clientCreationService;
     }
 
     private void generateClient() {
@@ -42,7 +45,8 @@ public class ClientGenerator {
                 privilegeGenerator.getPrivilege());
 
         moveSystem.addClient(paydecks, client);
-
+        //CreationEvent creationEvent = new CreationEvent(client);
+        //clientCreationService.sendClientCreatedEvent();
         scheduler.schedule(this::generateClient,
                 timeGenerationStrategy.getNextGenerationDelay(),
                 TimeUnit.SECONDS);

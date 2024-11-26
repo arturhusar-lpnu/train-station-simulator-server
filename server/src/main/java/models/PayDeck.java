@@ -1,6 +1,8 @@
 package models;
 
 import event_dispather.WebNotifier.WebNotifier;
+import event_listeners.web.ServeClientService;
+import events.ModifiedQueueEvent;
 import events.ServiceEvent;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,13 +22,13 @@ public class PayDeck {
     private final int id;
     private final PriorityQueue<Client> clientsQueue;
     private AtomicBoolean isWorking;
-    private WebNotifier webNotifier;
+    private ServeClientService serveClientService;
 
-    public PayDeck(int id, WebNotifier webNotifier) {
+    public PayDeck(int id, ServeClientService serveClientService) {
         this.id = id;
         isWorking = new AtomicBoolean(true);
         clientsQueue = new PriorityQueue<>( (c1, c2) -> Integer.compare(calculatePriority(c1), calculatePriority(c2)));
-        this.webNotifier = webNotifier;
+        this.serveClientService = serveClientService;
     }
     //================================================================================
     // Допоміжна може можна скоротити
@@ -47,8 +49,8 @@ public class PayDeck {
         //Throw event
         synchronized (clientsQueue) {
             clientsQueue.add(client);
-            //webNotifier.notify(new QueueChangedEvent(this));
-            //System.out.println("Client added to paydesk queue: " + client);
+            ModifiedQueueEvent modifiedQueueEvent = new ModifiedQueueEvent(this);
+            serveClientService.sendModifiedQueueEvent(modifiedQueueEvent);
         }
     }
 }
