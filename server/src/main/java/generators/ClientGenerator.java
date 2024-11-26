@@ -1,22 +1,19 @@
 package generators;
 
-import event_listeners.web.ClientCreationService;
+import services.ClientCreationService;
 import events.CreationEvent;
 import lombok.Setter;
 import models.Client;
 import models.PayDeck;
-import models.Position;
-import strategy.tickets.FixedTicketsStrategy;
 import strategy.tickets.TicketsGenerationStrategy;
-import strategy.time.FixedTimeStrategy;
 import strategy.time.TimeGenerationStrategy;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 // delay поставив в секундах, подумайте, чи норм, чи забрати і в мілісекундах]
 
@@ -29,37 +26,39 @@ public class ClientGenerator {
     private TimeGenerationStrategy timeGenerationStrategy;
     private PrivilegeGenerator privilegeGenerator;
     private TicketsGenerationStrategy ticketsGenerationStrategy;
-    private AtomicInteger clientCounter = new AtomicInteger(0);
     private ScheduledThreadPoolExecutor scheduler;
 
     private ClientCreationService clientCreationService;
-    public ClientGenerator(TimeGenerationStrategy timeGen, PrivilegeGenerator privilegeGen, TicketsGenerationStrategy ticketsGen, ClientCreationService clientCreationService) {
+    public ClientGenerator(TimeGenerationStrategy timeGen, PrivilegeGenerator privilegeGen, TicketsGenerationStrategy ticketsGen) {
         this.timeGenerationStrategy = timeGen;
         this.privilegeGenerator = privilegeGen;
         this.ticketsGenerationStrategy = ticketsGen;
+    }
+
+    public void setClientService(ClientCreationService clientCreationService) {
         this.clientCreationService = clientCreationService;
     }
 
     private void generateClient() {
         var ticketSystem = TicketSystem.getInstance();
-        var moveSystem = ticketSystem.getClientMoveSystem();
-        var paydecks = ticketSystem.getPayDeckSystem().getPayDecks();
-        var entries = ticketSystem.getRoomMap().getEntries();
+        var payDecks = ticketSystem.getPayDeckSystem().getPayDecks();
+        if(clients.size() >= payDecks.size()) {
+            return;
+        }
 
-        Position startPosition = entries.get(new Random().nextInt(0, entries.size()));
+        String newClientId = UUID.randomUUID().toString();
+
         Client client = new Client(
-                clientCounter.incrementAndGet(),
+                newClientId,
                 ticketsGenerationStrategy.getTickets(),
-                startPosition,
                 privilegeGenerator.getPrivilege()
         );
 
-
         clients.add(client);
-        PayDeck selectedPayDeck = PayDeckChooseSystem.choosePaydeck(paydecks, client);
+        PayDeck selectedPayDeck = PayDeckChooseSystem.choosePaydeck(payDecks, client);
 
-        //CreationEvent creationEvent = new CreationEvent(client);
-        //clientCreationService.sendClientCreatedEvent();
+        CreationEvent creationEvent = new CreationEvent(client, LocalDateTime.now(), selectedPayDeck);
+        clientCreationService.sendClientCreatedEvent(creationEvent);
 
         scheduler.schedule(this::generateClient,
                 timeGenerationStrategy.getNextGenerationDelay(),
@@ -80,5 +79,8 @@ public class ClientGenerator {
 
     public List<Client> getClients() {
         return new ArrayList<>(clients);
+    }
+    public Client getClientByID(String clientId) {
+        return clients.stream().filter(c -> c.getId().equals(clientId)).findFirst().orElse(null);
     }
 }

@@ -1,17 +1,20 @@
 package events;
 
 import lombok.Getter;
+import models.Client;
 import models.PayDeck;
 
 import java.time.LocalDateTime;
 
 @Getter
 public class CrashPaydeckEvent implements Event {
-    private PayDeck crashedPaydeck;
-    private LocalDateTime startTime;
+    private final PayDeck crashedPaydeck;
+    private final LocalDateTime startTime;
+    private final Client interruptedClient;
 
-    public CrashPaydeckEvent(PayDeck crashedPaydeck, LocalDateTime startTime) {
+    public CrashPaydeckEvent(PayDeck crashedPaydeck, Client interruptedClient, LocalDateTime startTime) {
         this.crashedPaydeck = crashedPaydeck;
+        this.interruptedClient = interruptedClient;
         this.startTime = startTime;
     }
 

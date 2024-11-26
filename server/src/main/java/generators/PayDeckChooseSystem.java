@@ -2,11 +2,8 @@ package generators;
 
 import models.PayDeck;
 import models.Client;
-import models.privileges.PrivilegeType;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 
 public class PayDeckChooseSystem {
 
@@ -17,7 +14,7 @@ public class PayDeckChooseSystem {
      *
      *   @param paydecks     the list of available paydecks
      *   @param client       client itself to determine his privilege
-     *   @return the chosen paydec, or null in the worst scenario when random god doesn't help
+     *   @return the chosen paydeck, or null in the worst scenario when random god doesn't help
      */
 
     public static PayDeck choosePaydeck(List<PayDeck> paydecks, Client client) {

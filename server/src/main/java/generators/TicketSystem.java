@@ -1,15 +1,10 @@
 package generators;
 
 import event_dispather.EventLogger.EventLogger;
-import event_dispather.WebNotifier.WebNotifier;
-import event_listeners.web.ServeClientService;
+import services.SimulationService;
 import lombok.Getter;
 import lombok.Setter;
-import models.StationRoom;
 
-import java.time.LocalTime;
-import java.util.Timer;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
 //================================================================================
@@ -22,29 +17,17 @@ import java.util.concurrent.locks.ReentrantLock;
 public class TicketSystem {
     private PayDeckSystem payDeckSystem;
     private ClientGenerator clientGenerator;
-    private StationRoom roomMap;
-    private Timer timer;
-    private LocalTime startOfWorkingDay;
-    private LocalTime endOfWorkingDay;
-    //private EventDispatcher eventDispatcher;
-    private WebNotifier webNotifier;
+    private SimulationService simulationService;
+    private CrashPaydeckGenerator crashPaydeckGenerator;
     private EventLogger eventLogger;
-    private ClientMoveSystem clientMoveSystem;
     private static TicketSystem instance;
     private static ReentrantLock lock = new ReentrantLock();
-    private AtomicBoolean isFirstTime = new AtomicBoolean(true);
 
     private TicketSystem(TicketSystemConfig config) {
         this.payDeckSystem = config.getPayDeckSystem();
         this.clientGenerator = config.getClientGenerator();
-        this.roomMap = config.getRoomMap();
-        this.timer = config.getTimer();
-        this.startOfWorkingDay = config.getStartOfWorkingDay();
-        this.endOfWorkingDay = config.getEndOfWorkingDay();
-//        this.eventDispatcher = config.getEventDispatcher(); Хз ніби так краще буде, потім глянете
-        this.webNotifier = config.getWebNotifier();
         this.eventLogger = config.getEventLogger();
-        this.clientMoveSystem = config.getClientMoveSystem();
+        crashPaydeckGenerator = config.getCrashGenerator();
     }
 
     public static TicketSystem getInstance() {
@@ -69,31 +52,28 @@ public class TicketSystem {
         return instance;
     }
     public void startClientGenerator() {
-
+        clientGenerator.startGenerateClients();
     }
 
-    public void startPayDecks() {
-
+    public void stopClientGenerator() {
+        clientGenerator.stopGenerateClients();
     }
 
-    public void startTimer() {
+    public void startCrashGeneration() { crashPaydeckGenerator.startCrashes();}
 
-    }
-
-    public void stopTimer() { //рома писав що можна додати пул потоків
-
-    }
 
     public void startSystem() {
         if(instance == null) {
             throw new IllegalStateException("TicketSystem is not initialized. Use getInstance with parameters first.");
         }
-        startTimer();
+        //Client
         startClientGenerator();
-        startPayDecks();
-        stopTimer();
+
+        //Crashes
+        startCrashGeneration();
     }
     public void stopSystem() {
-
+        payDeckSystem.shutdown();
+        stopClientGenerator();
     }
 }
