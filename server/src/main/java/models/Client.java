@@ -30,4 +30,4 @@ public class Client {
     public void setPosition(Position position) {
         this.currPosition = position;
     }
- }
+}

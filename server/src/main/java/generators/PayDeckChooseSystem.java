@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class PayDeckChooseSystem {
 
-    // "Вроді працює правильно, тільки Бог знає шо викине в найпотрібніший момент"
+    // Вроді працює правильно, тільки Бог знає шо викине в найпотрібніший момент
 
     /**
      *   Chooses the most convenient paydeck
@@ -46,7 +46,7 @@ public class PayDeckChooseSystem {
 
         for (Client queuedClient : paydeck.getClientsQueue()) {
             if (!clientPositioned && queuedClient.getPrivilege().ordinal() >= client.getPrivilege().ordinal()) {
-                clientPositioned = true; // Клієнт стає перед першими, хто має рівні або нижчі привілеї
+                clientPositioned = true;
                 time += client.getTicketsToBuy();
             }
             time += queuedClient.getTicketsToBuy();
