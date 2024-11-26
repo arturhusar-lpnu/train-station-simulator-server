@@ -36,7 +36,7 @@ public class PayDeckSystem {
     }
 
     public PayDeckSystem(int payDeckCount) {
-        List<PayDeck> payDecks = new ArrayList<>(payDeckCount);
+        payDecks = new ArrayList<>(payDeckCount);
         for (int i = 0; i < payDeckCount; i++) {
             payDecks.add(new PayDeck());
         }
@@ -69,6 +69,7 @@ public class PayDeckSystem {
     }
 
     public void setServeClientService(ServeClientService serveClientService) {
+
         this.serveClientService = serveClientService;
         payDecks.forEach(p -> p.setService(serveClientService));
     }

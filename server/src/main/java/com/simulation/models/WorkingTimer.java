@@ -21,13 +21,19 @@ public class WorkingTimer {
     public WorkingTimer(long durationMinutes, TicketSystem ticketSystem) {
         this.durationMinutes = durationMinutes;
         this.ticketSystem = ticketSystem;
+        simulationService = ticketSystem.getSimulationService();
     }
 
     public void startTimer() {
         ticketSystem.startSystem();
         scheduler.schedule(this::stopTimer, durationMinutes, TimeUnit.SECONDS);
-        StartSystemEvent startSystemEvent = new StartSystemEvent(LocalDateTime.now());
+
+        StartSystemEvent startSystemEvent = new StartSystemEvent(ticketSystem.getPayDeckSystem().getPayDecks(), LocalDateTime.now());
         simulationService.sendSimulationStartedEvent(startSystemEvent);
+    }
+
+    public void SetSimulationService(SimulationService simulationService) {
+        this.simulationService = simulationService;
     }
 
     public void stopTimer() {
