@@ -71,4 +71,8 @@ public class PayDeck implements Runnable {
             System.out.println("Client added to paydesk queue: " + client);
         }
     }
+
+    public int getQueueSize() {
+        return clientsQueue.size();
+    }
 }
