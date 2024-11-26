@@ -8,6 +8,7 @@ import strategy.tickets.TicketsGenerationStrategy;
 import strategy.time.FixedTimeStrategy;
 import strategy.time.TimeGenerationStrategy;
 
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -20,6 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 //
 @Setter
 public class ClientGenerator {
+    private List<Client> clients;
     private TimeGenerationStrategy timeGenerationStrategy;
     private PrivilegeGenerator privilegeGenerator;
     private TicketsGenerationStrategy ticketsGenerationStrategy;

@@ -19,6 +19,7 @@ public class PayDeck implements Runnable {
     private final PriorityQueue<Client> clientsQueue;
     private AtomicBoolean isWorking;
 
+
     public PayDeck(int id) {
         this.id = id;
         isWorking = new AtomicBoolean(true);
