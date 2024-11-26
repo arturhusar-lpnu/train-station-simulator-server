@@ -2,15 +2,18 @@ package events;
 
 import generators.TicketSystem;
 
+import java.time.LocalDateTime;
+
 public class EndSystemEvent implements Event {
     private TicketSystem system;
-
-    public EndSystemEvent(TicketSystem system) {
-        this.system = system;
+    private final LocalDateTime endTime;
+    public EndSystemEvent(LocalDateTime endTime) {
+      //  this.system = system;
+        this.endTime = endTime;
     }
 
     @Override
     public String convert() {
-        return "System ended: " + system.toString();
+        return "System ended: " + endTime.toString();
     }
 }

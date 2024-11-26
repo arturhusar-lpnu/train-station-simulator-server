@@ -1,4 +1,4 @@
-package event_listeners.web;
+package services;
 
 import events.CreationEvent;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,8 @@
-package event_listeners.web;
+package services;
 
 import events.CrashPaydeckEvent;
 import events.ModifiedQueueEvent;
+import events.RecoveryPaydeckEvent;
 import events.ServiceEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -39,5 +40,9 @@ public class ServeClientService {
 
     public void sendModifiedQueueEvent(ModifiedQueueEvent modifiedQueueEvent) {
         messagingTemplate.convertAndSend("/topic/modified-queue", modifiedQueueEvent);
+    }
+
+    public void sendRecoveredDeckEvent(RecoveryPaydeckEvent recoveredDeckEvent) {
+        messagingTemplate.convertAndSend("/topic/recovered-deck", recoveredDeckEvent);
     }
 }

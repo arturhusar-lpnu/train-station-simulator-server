@@ -4,18 +4,21 @@ import models.PayDeck;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class CrashPaydeckGenerator {
     private PayDeckSystem payDeckSystem;
     private double crashProbability;
-    private ScheduledThreadPoolExecutor scheduler;
+    private PayDeck crashedPayDeck;
+    private ScheduledThreadPoolExecutor crashThread;
+    private ScheduledExecutorService recoveryThread = Executors.newSingleThreadScheduledExecutor();
 
     public void startCrashes() {
-        scheduler = new ScheduledThreadPoolExecutor(1);
-
-        scheduler.scheduleAtFixedRate(this::crashRandomDeck, 0, 120, TimeUnit.SECONDS);
+        crashThread = new ScheduledThreadPoolExecutor(1);
+        crashThread.scheduleAtFixedRate(this::crashRandomDeck, 0, 120, TimeUnit.SECONDS);
     }
 
     private void crashRandomDeck() {
@@ -26,14 +29,21 @@ public class CrashPaydeckGenerator {
 
         List<PayDeck> workingPayDecks = payDeckSystem.getPayDecks().stream().filter(PayDeck::isWorking).toList();
 
-        if(workingPayDecks.isEmpty() && scheduler != null && !scheduler.isShutdown()) {
-            scheduler.shutdown();
+        if(workingPayDecks.isEmpty() && crashThread != null && !crashThread.isShutdown()) {
+            crashThread.shutdown();
         }
 
         int randomIndex = rand.nextInt(workingPayDecks.size());
 
-        PayDeck payDeckToCrush = workingPayDecks.get(randomIndex);
-        payDeckSystem.interruptTask(payDeckToCrush.getId());
-        payDeckToCrush.getClientsQueue().forEach(c -> PayDeckChooseSystem.choosePaydeck(workingPayDecks, c));
+        crashedPayDeck = workingPayDecks.get(randomIndex);
+        payDeckSystem.interruptTask(crashedPayDeck.getId());
+        crashedPayDeck.getClientsQueue().forEach(c -> PayDeckChooseSystem.choosePaydeck(workingPayDecks, c));
+        int recoveryTime = rand.nextInt(0, 20) + 40;
+        recoveryThread.schedule(this::recoverPayDeck, recoveryTime, TimeUnit.SECONDS);
+    }
+
+    private void recoverPayDeck() {
+        crashedPayDeck.recover();
+        payDeckSystem.setRecoveredPayDeck(crashedPayDeck);
     }
 }

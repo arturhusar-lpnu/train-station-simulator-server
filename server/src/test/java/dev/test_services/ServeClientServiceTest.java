@@ -1,6 +1,6 @@
 package dev.test_services;
 
-import event_listeners.web.ServeClientService;
+import services.ServeClientService;
 import events.CrashPaydeckEvent;
 import events.ModifiedQueueEvent;
 import events.ServiceEvent;

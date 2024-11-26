@@ -2,20 +2,21 @@ package events;
 
 import generators.TicketSystem;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class StartSystemEvent implements Event {
-    private TicketSystem system;
+    private final LocalDateTime startTime;
 
-    public StartSystemEvent(TicketSystem system) {
-        this.system = system;
+    public StartSystemEvent(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     @Override
     public String convert() {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String currentTime = LocalTime.now().format(timeFormatter);
-        return "System started: [" + currentTime + "]" + ": " + system.toString();
+        String currentTime = startTime.format(timeFormatter);
+        return "System started: [" + currentTime + "]";
     }
 }

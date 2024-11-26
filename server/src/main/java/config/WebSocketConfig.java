@@ -23,9 +23,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/simulator-server").setAllowedOrigins("*").withSockJS();
     }
-    @Bean
-    public SimpMessagingTemplate simpMessagingTemplate(@Qualifier("brokerChannel")MessageChannel messageChannel) {
-        return new SimpMessagingTemplate(messageChannel);
-    }
-    //Testing
 }

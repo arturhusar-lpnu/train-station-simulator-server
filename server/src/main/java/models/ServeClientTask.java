@@ -1,6 +1,6 @@
 package models;
 
-import event_listeners.web.ServeClientService;
+import services.ServeClientService;
 import events.CrashPaydeckEvent;
 import events.ServiceEvent;
 
@@ -37,7 +37,7 @@ public class ServeClientTask implements Runnable {
             serveClientService.sendEndedServicingEvent(serviceEvent);
         } catch (InterruptedException e) {
             System.out.println("Task interrupted for PayDeck: " + payDeck.getId());
-            payDeck.setWorking(false);
+            payDeck.crash();
             client.interrupt();
             CrashPaydeckEvent crashPaydeckEvent = new CrashPaydeckEvent(payDeck, client, LocalDateTime.now());
             serveClientService.sendInterruptedServing(crashPaydeckEvent);
