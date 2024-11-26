@@ -2,12 +2,14 @@ package generators;
 
 import lombok.Setter;
 import models.Client;
+import models.PayDeck;
 import models.Position;
 import strategy.tickets.FixedTicketsStrategy;
 import strategy.tickets.TicketsGenerationStrategy;
 import strategy.time.FixedTimeStrategy;
 import strategy.time.TimeGenerationStrategy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -27,29 +29,49 @@ public class ClientGenerator {
     private TicketsGenerationStrategy ticketsGenerationStrategy;
     private AtomicInteger clientCounter = new AtomicInteger(0);
     private ScheduledThreadPoolExecutor scheduler;
+    private ClientCreateEventListener eventListener;
 
-    public ClientGenerator(TimeGenerationStrategy timeGen, PrivilegeGenerator privilegeGen, TicketsGenerationStrategy ticketsGen) {
+    public ClientGenerator(
+            TimeGenerationStrategy timeGen,
+            PrivilegeGenerator privilegeGen,
+            TicketsGenerationStrategy ticketsGen) {
         this.timeGenerationStrategy = timeGen;
         this.privilegeGenerator = privilegeGen;
         this.ticketsGenerationStrategy = ticketsGen;
+        this.eventListener = eventListener;
+        this.clients = new ArrayList<>();
+    }
+
+    public interface ClientCreateEventListener {
+        void onClientCreated(Client client, PayDeck selectedPayDeck);
     }
 
     private void generateClient() {
-        var moveSystem = TicketSystem.getInstance().getClientMoveSystem();
-        var paydecks = TicketSystem.getInstance().getPayDeckSystem().getPayDecks();
-        var entries = TicketSystem.getInstance().getRoomMap().getEntries();
+        var ticketSystem = TicketSystem.getInstance();
+        var moveSystem = ticketSystem.getClientMoveSystem();
+        var paydecks = ticketSystem.getPayDeckSystem().getPayDecks();
+        var entries = ticketSystem.getRoomMap().getEntries();
+
         Position startPosition = entries.get(new Random().nextInt(0, entries.size()));
-        Client client = new Client(clientCounter.incrementAndGet(),
+        Client client = new Client(
+                clientCounter.incrementAndGet(),
                 ticketsGenerationStrategy.getTickets(),
                 startPosition,
-                privilegeGenerator.getPrivilege());
+                privilegeGenerator.getPrivilege()
+        );
+
+        clients.add(client);
+        PayDeck selectedPayDeck = PayDeckChooseSystem.choosePaydeck(paydecks, client);
+
+        if (eventListener != null) {
+            eventListener.onClientCreated(client, selectedPayDeck);
+        }
 
         moveSystem.addClient(paydecks, client);
-
         scheduler.schedule(this::generateClient,
                 timeGenerationStrategy.getNextGenerationDelay(),
                 TimeUnit.SECONDS);
-    };
+    }
 
     public void startGenerateClients() {
         scheduler = new ScheduledThreadPoolExecutor(1);
@@ -61,5 +83,9 @@ public class ClientGenerator {
 
     public void stopGenerateClients() {
         scheduler.shutdownNow();
+    }
+
+    public List<Client> getClients() {
+        return new ArrayList<>(clients);
     }
 }
