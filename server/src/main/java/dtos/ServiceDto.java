@@ -2,7 +2,5 @@ package dtos;
 
 import models.*;
 
-import java.sql.Time;
-
-public record ServiceDto(Client client, Time startTime, Time endTime, PayDeck servicePayDeck, int ticketsCount) {
+public record ServiceDto(Client client, long servingTime, PayDeck servicePayDeck) {
 }

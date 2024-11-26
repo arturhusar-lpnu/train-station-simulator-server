@@ -1,5 +1,7 @@
 package generators;
 
+import event_listeners.web.ClientCreationService;
+import events.CreationEvent;
 import lombok.Setter;
 import models.Client;
 import models.PayDeck;
@@ -29,21 +31,13 @@ public class ClientGenerator {
     private TicketsGenerationStrategy ticketsGenerationStrategy;
     private AtomicInteger clientCounter = new AtomicInteger(0);
     private ScheduledThreadPoolExecutor scheduler;
-    private ClientCreateEventListener eventListener;
 
-    public ClientGenerator(
-            TimeGenerationStrategy timeGen,
-            PrivilegeGenerator privilegeGen,
-            TicketsGenerationStrategy ticketsGen) {
+    private ClientCreationService clientCreationService;
+    public ClientGenerator(TimeGenerationStrategy timeGen, PrivilegeGenerator privilegeGen, TicketsGenerationStrategy ticketsGen, ClientCreationService clientCreationService) {
         this.timeGenerationStrategy = timeGen;
         this.privilegeGenerator = privilegeGen;
         this.ticketsGenerationStrategy = ticketsGen;
-        this.eventListener = eventListener;
-        this.clients = new ArrayList<>();
-    }
-
-    public interface ClientCreateEventListener {
-        void onClientCreated(Client client, PayDeck selectedPayDeck);
+        this.clientCreationService = clientCreationService;
     }
 
     private void generateClient() {
@@ -60,14 +54,13 @@ public class ClientGenerator {
                 privilegeGenerator.getPrivilege()
         );
 
+
         clients.add(client);
         PayDeck selectedPayDeck = PayDeckChooseSystem.choosePaydeck(paydecks, client);
 
-        if (eventListener != null) {
-            eventListener.onClientCreated(client, selectedPayDeck);
-        }
+        //CreationEvent creationEvent = new CreationEvent(client);
+        //clientCreationService.sendClientCreatedEvent();
 
-        moveSystem.addClient(paydecks, client);
         scheduler.schedule(this::generateClient,
                 timeGenerationStrategy.getNextGenerationDelay(),
                 TimeUnit.SECONDS);

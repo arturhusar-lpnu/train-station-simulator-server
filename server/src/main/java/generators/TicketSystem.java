@@ -2,6 +2,7 @@ package generators;
 
 import event_dispather.EventLogger.EventLogger;
 import event_dispather.WebNotifier.WebNotifier;
+import event_listeners.web.ServeClientService;
 import lombok.Getter;
 import lombok.Setter;
 import models.StationRoom;
