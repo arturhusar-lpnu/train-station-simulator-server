@@ -1,9 +1,9 @@
 package dev.test_services;
 
-import services.ServeClientService;
-import events.CrashPaydeckEvent;
-import events.ModifiedQueueEvent;
-import events.ServiceEvent;
+import com.simulation.services.ServeClientService;
+import com.simulation.events.CrashPaydeckEvent;
+import com.simulation.events.ModifiedQueueEvent;
+import com.simulation.events.ServiceEvent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

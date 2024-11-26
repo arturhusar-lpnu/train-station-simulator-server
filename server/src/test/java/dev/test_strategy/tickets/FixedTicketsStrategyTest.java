@@ -1,8 +1,8 @@
 package dev.test_strategy.tickets;
 
-import exceptions.InvalidArgumentException;
+import com.simulation.exceptions.InvalidArgumentException;
 import org.junit.jupiter.api.Test;
-import strategy.tickets.FixedTicketsStrategy;
+import com.simulation.strategy.tickets.FixedTicketsStrategy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
