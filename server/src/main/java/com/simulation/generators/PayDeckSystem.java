@@ -36,7 +36,7 @@ public class PayDeckSystem {
     }
 
     public PayDeckSystem(int payDeckCount) {
-        List<PayDeck> payDecks = new ArrayList<>(payDeckCount);
+        payDecks = new ArrayList<>(payDeckCount);
         for (int i = 0; i < payDeckCount; i++) {
             payDecks.add(new PayDeck());
         }
@@ -79,6 +79,18 @@ public class PayDeckSystem {
             future.cancel(true);
             taskMap.remove(payDeckId);
         }
+        PayDeck crashedPayDeck = getPayDeckById(payDeckId);
+
+        payDecks.remove(crashedPayDeck);
+
+        reservedPayDeck.setWorking(true);
+
+        payDecks.add(reservedPayDeck);
+
+        reservedPayDeck = crashedPayDeck;
+    }
+
+    public void recoverDeck(String payDeckId) {
         reservedPayDeck.setWorking(true);
     }
 

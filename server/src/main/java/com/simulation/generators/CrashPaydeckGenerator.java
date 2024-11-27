@@ -1,7 +1,11 @@
 package com.simulation.generators;
 
+import com.simulation.events.ClientChooseEvent;
 import com.simulation.models.PayDeck;
+import com.simulation.services.ClientService;
+import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -13,6 +17,8 @@ public class CrashPaydeckGenerator {
     private final PayDeckSystem payDeckSystem;
     private final double crashProbability;
     private PayDeck crashedPayDeck;
+    @Setter
+    private ClientService clientService;
     private ScheduledThreadPoolExecutor crashThread;
     private final ScheduledExecutorService recoveryThread = Executors.newSingleThreadScheduledExecutor();
 
@@ -28,11 +34,11 @@ public class CrashPaydeckGenerator {
 
     private void crashRandomDeck() {
         Random rand = new Random();
-        if(rand.nextDouble() <= crashProbability) {
+        if(rand.nextDouble() >= crashProbability) {
            return;
         }
 
-        List<PayDeck> workingPayDecks = payDeckSystem.getPayDecks().stream().filter(PayDeck::isWorking).toList();
+        List<PayDeck> workingPayDecks = new ArrayList<>(payDeckSystem.getPayDecks().stream().filter(PayDeck::isWorking).toList());
 
         if(workingPayDecks.isEmpty() && crashThread != null && !crashThread.isShutdown()) {
             crashThread.shutdown();
@@ -41,9 +47,14 @@ public class CrashPaydeckGenerator {
         int randomIndex = rand.nextInt(workingPayDecks.size());
 
         crashedPayDeck = workingPayDecks.get(randomIndex);
+        workingPayDecks.remove(crashedPayDeck);
         payDeckSystem.interruptTask(crashedPayDeck.getId());
-        crashedPayDeck.getClientsQueue().forEach(c -> PayDeckChooseSystem.choosePaydeck(workingPayDecks, c));
-        int recoveryTime = rand.nextInt(0, 20) + 40;
+        crashedPayDeck.getClientsQueue().forEach(c -> {
+            PayDeck choosedPayDeck = PayDeckChooseSystem.choosePaydeck(workingPayDecks, c);
+            ClientChooseEvent clientChooseEvent = new ClientChooseEvent(c, choosedPayDeck);
+            clientService.sendClientChooseNewDeckEvent(clientChooseEvent);
+        });
+        int recoveryTime = rand.nextInt(0, 10) + 30;
         recoveryThread.schedule(this::recoverPayDeck, recoveryTime, TimeUnit.SECONDS);
     }
 

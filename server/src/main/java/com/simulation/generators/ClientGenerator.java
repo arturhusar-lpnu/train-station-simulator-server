@@ -1,6 +1,6 @@
 package com.simulation.generators;
 
-import com.simulation.services.ClientCreationService;
+import com.simulation.services.ClientService;
 import com.simulation.events.CreationEvent;
 import lombok.Setter;
 import com.simulation.models.Client;
@@ -28,20 +28,22 @@ public class ClientGenerator {
     private TicketsGenerationStrategy ticketsGenerationStrategy;
     private ScheduledThreadPoolExecutor scheduler;
 
-    private ClientCreationService clientCreationService;
+    private ClientService clientService;
     public ClientGenerator(TimeGenerationStrategy timeGen, PrivilegeGenerator privilegeGen, TicketsGenerationStrategy ticketsGen) {
         this.timeGenerationStrategy = timeGen;
         this.privilegeGenerator = privilegeGen;
         this.ticketsGenerationStrategy = ticketsGen;
+        this.clients = new ArrayList<>();
     }
 
-    public void setClientService(ClientCreationService clientCreationService) {
-        this.clientCreationService = clientCreationService;
+    public void setClientService(ClientService clientService) {
+        this.clientService = clientService;
     }
 
     private void generateClient() {
         var ticketSystem = TicketSystem.getInstance();
         var payDecks = ticketSystem.getPayDeckSystem().getPayDecks();
+        System.out.println("Generating clients");
         if(clients.size() >= payDecks.size()) {
             return;
         }
@@ -55,10 +57,11 @@ public class ClientGenerator {
         );
 
         clients.add(client);
+        System.out.println("Client Added");
         PayDeck selectedPayDeck = PayDeckChooseSystem.choosePaydeck(payDecks, client);
 
         CreationEvent creationEvent = new CreationEvent(client, LocalDateTime.now(), selectedPayDeck);
-        clientCreationService.sendClientCreatedEvent(creationEvent);
+        clientService.sendClientCreatedEvent(creationEvent);
 
         scheduler.schedule(this::generateClient,
                 timeGenerationStrategy.getNextGenerationDelay(),
@@ -67,7 +70,7 @@ public class ClientGenerator {
 
     public void startGenerateClients() {
         scheduler = new ScheduledThreadPoolExecutor(1);
-
+        System.out.println("Scheduled");
         scheduler.schedule(this::generateClient,
                 timeGenerationStrategy.getNextGenerationDelay(),
                 TimeUnit.SECONDS);

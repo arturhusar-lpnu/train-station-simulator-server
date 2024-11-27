@@ -7,6 +7,7 @@ import com.simulation.generators.TicketSystem;
 import com.simulation.generators.TicketSystemConfig;
 import com.simulation.models.Client;
 import com.simulation.models.WorkingTimer;
+import com.simulation.services.SimulationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -14,13 +15,18 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class SimulatorController {
-    private final TicketSystemInitializer ticketSystemInitializer;
+    //private final TicketSystemInitializer ticketSystemInitializer;
     private TicketSystem ticketSystem;
     private WorkingTimer workingTimer;
-
+    private final SimulationService simulation;
+//    @Autowired
+//    public SimulatorController(TicketSystemInitializer ticketSystemInitializer, SumulationService simulation) {
+//        this.ticketSystemInitializer = ticketSystemInitializer;
+//        this.simulation = simulation;
+//    }
     @Autowired
-    public SimulatorController(TicketSystemInitializer ticketSystemInitializer) {
-        this.ticketSystemInitializer = ticketSystemInitializer;
+    public SimulatorController(TicketSystemInitializer ticketSystemInitializer, SimulationService simulation) {
+        this.simulation = simulation;
     }
 
     @MessageMapping("/start-simulation")
@@ -28,10 +34,10 @@ public class SimulatorController {
         System.out.println("Received start-simulation message with config: " + config);
 
         TicketSystemConfig ticketSystemConfig = new TicketSystemConfig(config);
-
-        ticketSystem = ticketSystemInitializer.initializeTicketSystem(ticketSystemConfig);
-        workingTimer = new WorkingTimer(ticketSystemConfig.getDurationOfDay(), ticketSystem);
-        workingTimer.startTimer();//Запускає систему як вичерпається час зупинить
+        simulation.startSimulation(ticketSystemConfig);
+        //ticketSystem = ticketSystemInitializer.initializeTicketSystem(ticketSystemConfig);
+        //workingTimer = new WorkingTimer(ticketSystemConfig.getDurationOfDay(), ticketSystem);
+        //workingTimer.startTimer();//Запускає систему як вичерпається час зупинить
     }
 
     @MessageMapping("/client-reached-deck")

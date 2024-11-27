@@ -1,7 +1,7 @@
 package com.simulation.generators;
 
 import com.simulation.event_dispather.EventLogger.EventLogger;
-import com.simulation.services.SimulationService;
+import com.simulation.services.SimulationEventsService;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class TicketSystem {
     private PayDeckSystem payDeckSystem;
     private ClientGenerator clientGenerator;
-    private SimulationService simulationService;
+    private SimulationEventsService simulationEventsService;
     private CrashPaydeckGenerator crashPaydeckGenerator;
     private EventLogger eventLogger;
     private static TicketSystem instance;

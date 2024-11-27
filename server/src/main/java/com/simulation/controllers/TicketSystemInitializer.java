@@ -1,8 +1,8 @@
 package com.simulation.controllers;
 
-import com.simulation.services.ClientCreationService;
+import com.simulation.services.ClientService;
 import com.simulation.services.ServeClientService;
-import com.simulation.services.SimulationService;
+import com.simulation.services.SimulationEventsService;
 import com.simulation.generators.TicketSystem;
 import com.simulation.generators.TicketSystemConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,23 +12,23 @@ import org.springframework.stereotype.Service;
 public class TicketSystemInitializer {
 
     private final ServeClientService serveClientService;
-    private final ClientCreationService clientCreationService;
-    private final SimulationService simulationService;
+    private final ClientService clientService;
+    private final SimulationEventsService simulationEventsService;
     @Autowired
     public TicketSystemInitializer(ServeClientService serveClientService,
-                                   ClientCreationService clientCreationService,
-                                   SimulationService simulationService) {
+                                   ClientService clientService,
+                                   SimulationEventsService simulationEventsService) {
         this.serveClientService = serveClientService;
-        this.clientCreationService = clientCreationService;
-        this.simulationService = simulationService;
+        this.clientService = clientService;
+        this.simulationEventsService = simulationEventsService;
     }
     public TicketSystem initializeTicketSystem(TicketSystemConfig config) {
-        // If you want to ensure the service is set
+
         config.getPayDeckSystem().setServeClientService(serveClientService);
-        config.getClientGenerator().setClientCreationService(clientCreationService);
-  //      config.getPayDeckSystem().setServeClientService(serveClientService);
+        config.getClientGenerator().setClientService(clientService);
+
         TicketSystem ts = TicketSystem.getInstance(config);
-        ts.setSimulationService(simulationService);
+        ts.setSimulationEventsService(simulationEventsService);
 
         return ts;
     }
