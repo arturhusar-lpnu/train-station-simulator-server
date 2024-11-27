@@ -1,8 +1,8 @@
 package dev.test_strategy.time;
 
-import exceptions.InvalidArgumentException;
+import com.simulation.exceptions.InvalidArgumentException;
 import org.junit.jupiter.api.Test;
-import strategy.time.FixedTimeStrategy;
+import com.simulation.strategy.time.FixedTimeStrategy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
