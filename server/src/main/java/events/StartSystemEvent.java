@@ -6,7 +6,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class StartSystemEvent implements Event {
-    private TicketSystem system;
+    public TicketSystem system;
 
     public StartSystemEvent(TicketSystem system) {
         this.system = system;

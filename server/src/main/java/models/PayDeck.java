@@ -76,4 +76,10 @@ public class PayDeck implements Runnable {
     public int getQueueSize() {
         return clientsQueue.size();
     }
+
+    // Orest
+    // Додав метод для отримання даних з поля private
+    public boolean isWorking() {
+        return isWorking.get();
+    }
 }

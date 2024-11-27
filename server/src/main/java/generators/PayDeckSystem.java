@@ -28,4 +28,9 @@ public class PayDeckSystem {
     public void addClient(int id, Client client) {
         payDecks.get(id).addClient(client);
     }
+    public void start() {
+        // Put any initialization logic for PayDeckSystem here
+        System.out.println("PayDeckSystem started.");
+        // For example, you could start a thread pool or initialize any state
+    }
 }
