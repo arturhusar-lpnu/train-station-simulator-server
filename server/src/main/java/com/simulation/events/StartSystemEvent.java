@@ -1,18 +1,20 @@
 package com.simulation.events;
 
 import com.simulation.models.PayDeck;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class StartSystemEvent implements Event {
-    private final List<PayDeck> paydecks;
+    private final List<String> payDeckIds;
     private final LocalDateTime startTime;
 
-    public StartSystemEvent(LocalDateTime startTime, List<PayDeck> paydecks) {
-        this.paydecks = paydecks == null ? new ArrayList<>() : new ArrayList<>(paydecks);;
+    public StartSystemEvent(LocalDateTime startTime, List<String> payDeckIds) {
+        this.payDeckIds = payDeckIds;
         this.startTime = startTime;
     }
 

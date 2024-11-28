@@ -26,14 +26,15 @@ public class ServeClientTask implements Runnable {
 
         try {
             long servingTime = client.getTicketsToBuy() * 3000L;
-            ServiceEvent serviceEvent = new ServiceEvent(payDeck.getId(), servingTime);
-            serveClientService.sendServiceEvent(serviceEvent);
+            ServiceEvent serviceStartedEvent = new ServiceEvent(payDeck.getId(), servingTime, LocalDateTime.now());
+            serveClientService.sendServiceEvent(serviceStartedEvent);
 
             Thread.sleep(servingTime);
 
             payDeck.getClientsQueue().remove(client);
+            ServiceEvent serviceEndedEvent = new ServiceEvent(payDeck.getId(), servingTime, LocalDateTime.now());
             //New Serving Ended event
-            serveClientService.sendEndedServicingEvent(serviceEvent);
+            serveClientService.sendEndedServicingEvent(serviceEndedEvent);
         } catch (InterruptedException e) {
             System.out.println("Task interrupted for PayDeck: " + payDeck.getId());
             client.interrupt();

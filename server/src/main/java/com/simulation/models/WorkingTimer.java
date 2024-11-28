@@ -6,6 +6,7 @@ import com.simulation.events.StartSystemEvent;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -26,7 +27,13 @@ public class WorkingTimer {
     public void startTimer() {
         ticketSystem.startSystem();
         scheduler.schedule(this::stopTimer, durationMinutes, TimeUnit.SECONDS);
-        StartSystemEvent startSystemEvent = new StartSystemEvent(LocalDateTime.now(), ticketSystem.getPayDeckSystem().getPayDecks());
+        List<String> payDeckIds = ticketSystem.getPayDeckSystem()
+                                                .getPayDecks()
+                                                .stream()
+                                                .map(PayDeck::getId)
+                                                .toList();
+
+        StartSystemEvent startSystemEvent = new StartSystemEvent(LocalDateTime.now(), payDeckIds);
         simulationEventsService.sendSimulationStartedEvent(startSystemEvent);
     }
 

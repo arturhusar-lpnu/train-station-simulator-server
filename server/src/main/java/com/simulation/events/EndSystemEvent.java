@@ -1,7 +1,10 @@
 package com.simulation.events;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Getter
 public class EndSystemEvent implements Event {
     private final LocalDateTime endTime;
     public EndSystemEvent(LocalDateTime endTime) {

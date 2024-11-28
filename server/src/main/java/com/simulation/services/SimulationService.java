@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SimulationService {
-        private TicketSystemInitializer ticketSystemInitializer;
+        private final TicketSystemInitializer ticketSystemInitializer;
         @Getter
         private TicketSystem ticketSystem;
         @Getter
@@ -24,7 +24,6 @@ public class SimulationService {
             ticketSystem = ticketSystemInitializer.initializeTicketSystem(config);
             workingTimer = new WorkingTimer(config.getDurationOfDay(), ticketSystem);
             workingTimer.startTimer();
-            //add start-event
         }
 
         public synchronized void stopSimulation() {
