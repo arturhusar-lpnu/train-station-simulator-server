@@ -1,8 +1,6 @@
 package com.simulation.events;
 
-import com.simulation.models.PayDeck;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

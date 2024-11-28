@@ -26,16 +26,13 @@ public class ClientGenerator {
     private TicketsGenerationStrategy ticketsGenerationStrategy;
     private ScheduledThreadPoolExecutor scheduler;
 
+    @Setter
     private ClientService clientService;
     public ClientGenerator(TimeGenerationStrategy timeGen, PrivilegeGenerator privilegeGen, TicketsGenerationStrategy ticketsGen) {
         this.timeGenerationStrategy = timeGen;
         this.privilegeGenerator = privilegeGen;
         this.ticketsGenerationStrategy = ticketsGen;
         this.clients = new ArrayList<>();
-    }
-
-    public void setClientService(ClientService clientService) {
-        this.clientService = clientService;
     }
 
     private void generateClient() {

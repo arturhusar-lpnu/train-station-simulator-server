@@ -1,7 +1,6 @@
 package com.simulation.models;
 
 import com.simulation.services.ServeClientService;
-import com.simulation.events.CrashPaydeckEvent;
 import com.simulation.events.ServiceEvent;
 
 import java.time.LocalDateTime;

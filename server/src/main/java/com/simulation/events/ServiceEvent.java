@@ -18,7 +18,7 @@ public class ServiceEvent implements Event {
 
     @Override
     public String convert() {
-        return String.format("Service: PayDeckId=%d, ServingTime=%d",
+        return String.format("Service: PayDeckId=%s, ServingTime=%d",
                 payDeckId, servingTime);
     }
 }
