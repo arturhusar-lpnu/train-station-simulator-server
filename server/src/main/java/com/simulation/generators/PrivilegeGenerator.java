@@ -6,7 +6,7 @@ import com.simulation.models.privileges.PrivilegeType;
 import java.util.Random;
 
 public class PrivilegeGenerator {
-    private double probabilityOfPrivilege;
+    private final double probabilityOfPrivilege;
 
     public PrivilegeGenerator(double probabilityOfPrivilege) throws InvalidArgumentException {
         if (probabilityOfPrivilege < 0.0 || probabilityOfPrivilege > 1.0) {
@@ -19,7 +19,7 @@ public class PrivilegeGenerator {
     public PrivilegeType getPrivilege() {
         Random rand = new Random();
 
-        if (rand.nextDouble() < probabilityOfPrivilege ? true : false)
+        if (rand.nextDouble() < probabilityOfPrivilege)
             return PrivilegeType.fromInt(new Random().nextInt(1, 4));
         else
             return PrivilegeType.None;

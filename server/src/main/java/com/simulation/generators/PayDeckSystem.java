@@ -1,7 +1,7 @@
 package com.simulation.generators;
 
+import com.simulation.events.CrashPaydeckEvent;
 import com.simulation.services.ServeClientService;
-import com.simulation.events.RecoveryPaydeckEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,34 +26,26 @@ public class PayDeckSystem {
     private PayDeck reservedPayDeck;
     private ExecutorService threadPools;
     private ServeClientService serveClientService;
-    private final ConcurrentHashMap<String, Future<?>> taskMap = new ConcurrentHashMap<>();
-
-    public PayDeckSystem(List<PayDeck> payDecks, PayDeck reservedPayDeck, int threadPoolSize) {
-        this.payDecks = payDecks;
-        this.reservedPayDeck = reservedPayDeck;
-        reservedPayDeck.setWorking(false);
-        threadPools = Executors.newFixedThreadPool(threadPoolSize);
-    }
+    private final ConcurrentHashMap<String, Future<?>> taskMap;
 
     public PayDeckSystem(int payDeckCount) {
-        List<PayDeck> payDecks = new ArrayList<>(payDeckCount);
+        payDecks = new ArrayList<>(payDeckCount);
         for (int i = 0; i < payDeckCount; i++) {
             payDecks.add(new PayDeck());
         }
+
         reservedPayDeck = new PayDeck();
+        reservedPayDeck.setWorking(false);
+
         threadPools = Executors.newFixedThreadPool(payDeckCount);
-    }
-    public void setRecoveredPayDeck(PayDeck recoveredPayDeck) {
-        reservedPayDeck = recoveredPayDeck;
-        RecoveryPaydeckEvent recoveryPaydeckEvent = new RecoveryPaydeckEvent(recoveredPayDeck, LocalDateTime.now());
-        serveClientService.sendRecoveredDeckEvent(recoveryPaydeckEvent);
+        taskMap = new ConcurrentHashMap<>();
     }
 
-    public void paydeckServeClient(String payDeckId, Client client) {
+    public void payDeckServeClient(String payDeckId, Client client) {
         PayDeck payDeck = getPayDeckById(payDeckId);
 
-        if(payDeck == null) {
-            return;
+        if(payDeck == null || client == null) {
+            return; //throw NotFound
         }
 
         ServeClientTask task = new ServeClientTask(payDeck, client, serveClientService);
@@ -72,19 +64,32 @@ public class PayDeckSystem {
         this.serveClientService = serveClientService;
         payDecks.forEach(p -> p.setService(serveClientService));
     }
-    //FIX reserved payDeck
-    public void interruptTask(String payDeckId) {
-        Future<?> future = taskMap.get(payDeckId);
-        if (future != null) {
+    //FIXed reserved payDeck
+    public void interruptTask(PayDeck crashedPayDeck) {
+        Future<?> future = taskMap.get(crashedPayDeck.getId());
+        if (future != null) { //if pay deck does not serve a client its just crashing
             future.cancel(true);
-            taskMap.remove(payDeckId);
+            taskMap.remove(crashedPayDeck.getId());
         }
+
+        //crashed pay deck is not working after crash
+        crashedPayDeck.setWorking(false);
+
+        //it is removed from pay decks
+        payDecks.remove(crashedPayDeck);
+
+        //reserved activated
         reservedPayDeck.setWorking(true);
-    }
 
+        //reserved is now at the working list
+        payDecks.add(reservedPayDeck);
+        CrashPaydeckEvent crashPaydeckEvent = new CrashPaydeckEvent(crashedPayDeck, reservedPayDeck, LocalDateTime.now());
 
-    public void addClient(int id, Client client) {
-        payDecks.get(id).addClient(client);
+        //sends event on front to swap the
+        serveClientService.sendCrashedDecks(crashPaydeckEvent);
+
+        //the crashed becomes the reserved till next crash
+        reservedPayDeck = crashedPayDeck;
     }
 
     public void shutdown() {

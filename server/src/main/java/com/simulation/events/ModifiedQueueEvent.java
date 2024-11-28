@@ -1,9 +1,11 @@
 package com.simulation.events;
 
 import com.simulation.models.PayDeck;
+import lombok.Getter;
 
-public class ModifiedQueueEvent implements Event{
-    private PayDeck payDeck;
+@Getter
+public class ModifiedQueueEvent implements Event{ // Maybe throw list of clients
+    private final PayDeck payDeck;
 
     public ModifiedQueueEvent(PayDeck payDeck) {
         this.payDeck = payDeck;
@@ -11,6 +13,6 @@ public class ModifiedQueueEvent implements Event{
 
     @Override
     public String convert() {
-        return "";
+        return payDeck.toString();
     }
 }

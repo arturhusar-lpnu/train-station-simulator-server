@@ -1,22 +1,34 @@
 package com.simulation.services;
 
-import com.simulation.events.EndSystemEvent;
-import com.simulation.events.StartSystemEvent;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import com.simulation.models.TicketSystem;
+import com.simulation.config.TicketSystemConfig;
+import com.simulation.models.WorkingTimer;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SimulationService {
-    private SimpMessagingTemplate messagingTemplate;
+        private final TicketSystemInitializer ticketSystemInitializer;
+        @Getter
+        private TicketSystem ticketSystem;
+        @Getter
+        private WorkingTimer workingTimer;
 
-    public SimulationService(SimpMessagingTemplate messagingTemplate) {
-        this.messagingTemplate = messagingTemplate;
-    }
-    public void sendSimulationStartedEvent(StartSystemEvent startSystemEvent) {
-        messagingTemplate.convertAndSend("/topic/simulation-started", startSystemEvent);
-    }
+        @Autowired
+        public SimulationService(TicketSystemInitializer ticketSystemInitializer) {
+            this.ticketSystemInitializer = ticketSystemInitializer;
+        }
 
-    public void sendSimulationStopEvent(EndSystemEvent endSystemEvent) {
-        messagingTemplate.convertAndSend("/topic/simulation-ended", endSystemEvent);
-    }
+        public synchronized void startSimulation(TicketSystemConfig config) {
+            ticketSystem = ticketSystemInitializer.initializeTicketSystem(config);
+            workingTimer = new WorkingTimer(config.getDurationOfDay(), ticketSystem);
+            workingTimer.startTimer();
+        }
+
+        public synchronized void stopSimulation() {
+            if (workingTimer != null) {
+                workingTimer.stopTimer();
+            }
+        }
 }

@@ -1,48 +1,50 @@
 package com.simulation.services;
 
+import com.simulation.dtos.CrashPayDeckDto;
+import com.simulation.dtos.ModifiedQueueDto;
+import com.simulation.dtos.ServingClientEndedDto;
+import com.simulation.dtos.ServingClientStartedDto;
 import com.simulation.events.CrashPaydeckEvent;
 import com.simulation.events.ModifiedQueueEvent;
-import com.simulation.events.RecoveryPaydeckEvent;
 import com.simulation.events.ServiceEvent;
+import com.simulation.models.Client;
+import com.simulation.models.PayDeck;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-//@Component
-//public class ServiceWebListener extends WebListener{
-//    public ServiceWebListener(SimpMessagingTemplate messagingTemplate) {
-//        super(messagingTemplate);
-//    }
-//    @Override
-//    public void update(Event event) {
-//        if(event instanceof ServiceEvent) {
-//            messagingTemplate.convertAndSend("/topic/pay-decks/service", event);
-//        }
-//    }
-//}
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class ServeClientService {
     private final SimpMessagingTemplate messagingTemplate;
 
-    public void sendServiceEvent(ServiceEvent serviceEvent) { //SeviceStartedDto
-        messagingTemplate.convertAndSend("/topic/started-serving-client", serviceEvent);
+    public void sendServiceEvent(ServiceEvent serviceEvent) {
+        ServingClientStartedDto servingStartedDto = new ServingClientStartedDto(serviceEvent.getPayDeckId(), serviceEvent.getServingTime());
+        messagingTemplate.convertAndSend("/topic/started-serving-client", servingStartedDto);
     }
 
-    public void sendEndedServicingEvent(ServiceEvent serviceEvent) { //SeviceEndedDto
-        messagingTemplate.convertAndSend("/topic/stoped-serving-client", serviceEvent);
+    public void sendEndedServicingEvent(ServiceEvent serviceEvent) {
+        ServingClientEndedDto servingEndedDto = new ServingClientEndedDto(serviceEvent.getCreatedAt(), serviceEvent.getPayDeckId());
+        messagingTemplate.convertAndSend("/topic/stopped-serving-client", servingEndedDto);
     }
 
-    public void sendInterruptedServing(CrashPaydeckEvent interuptedEvent) {
-        messagingTemplate.convertAndSend("/topic/pay-deck-crush", interuptedEvent);
+    public void sendCrashedDecks(CrashPaydeckEvent crushedEvent) {// crushed and reserved pay decks
+        CrashPayDeckDto crashPayDeckDto = new CrashPayDeckDto(crushedEvent.getCrashedPaydeck().getId(),
+                                                                crushedEvent.getReservedPaydeck().getId(),
+                                                                crushedEvent.getCreatedAt());
 
+        messagingTemplate.convertAndSend("/topic/pay-deck-crush", crashPayDeckDto);
     }
 
     public void sendModifiedQueueEvent(ModifiedQueueEvent modifiedQueueEvent) {
-        messagingTemplate.convertAndSend("/topic/modified-queue", modifiedQueueEvent);
-    }
+        System.out.println("Sent modified queue " + modifiedQueueEvent);
+        PayDeck payDeck = modifiedQueueEvent.getPayDeck();
+        String payDeckId = payDeck.getId();
+        List<String> clientIds = payDeck.getClientsQueue().stream().map(Client::getId).toList();
+        ModifiedQueueDto modifiedQueueDto = new ModifiedQueueDto(payDeckId, clientIds);
 
-    public void sendRecoveredDeckEvent(RecoveryPaydeckEvent recoveredDeckEvent) {
-        messagingTemplate.convertAndSend("/topic/recovered-deck", recoveredDeckEvent);
+        messagingTemplate.convertAndSend("/topic/modified-queue", modifiedQueueDto);
     }
 }

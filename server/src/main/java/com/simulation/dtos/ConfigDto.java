@@ -1,7 +1,6 @@
-package com.simulation.dtos;
+    package com.simulation.dtos;
 
-import java.util.List;
+    import java.util.List;
 
-public record ConfigDto(String startOfWorkingDay, String endOfWorkingDay, int payDecksCount, List<Long> timeStrategyArguments, List<Integer> ticketsStrategyArguments) {
-
-}
+    public record ConfigDto(String startOfWorkingDay, String endOfWorkingDay, int payDecksCount, List<Long> timeStrategyArguments, List<Integer> ticketsStrategyArguments) {
+    }
