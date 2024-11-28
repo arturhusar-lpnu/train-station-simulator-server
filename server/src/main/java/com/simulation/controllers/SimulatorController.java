@@ -1,5 +1,6 @@
 package com.simulation.controllers;
 
+import com.simulation.dtos.ClientReachedDeckDto;
 import com.simulation.dtos.ConfigDto;
 import com.simulation.exceptions.InvalidArgumentException;
 import com.simulation.generators.PayDeckSystem;
@@ -29,7 +30,10 @@ public class SimulatorController {
     }
 
     @MessageMapping("/client-reached-deck")
-    public void onClientReachedDeck(@Payload String payDeckId, @Payload String clientId) {
+    public void onClientReachedDeck(@Payload ClientReachedDeckDto reachedDeck) {
+        String payDeckId = reachedDeck.payDeckId();
+        String clientId = reachedDeck.clientId();
+        System.out.println(payDeckId + " " + clientId);
         PayDeckSystem pds = simulation.getTicketSystem().getPayDeckSystem();
         Client client = simulation.getTicketSystem().getClientGenerator().getClientByID(clientId);
 

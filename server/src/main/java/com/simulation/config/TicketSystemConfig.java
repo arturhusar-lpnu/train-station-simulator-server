@@ -31,7 +31,7 @@ public class TicketSystemConfig {
     public TicketSystemConfig(ConfigDto config) throws InvalidArgumentException {
         startOfWorkingDay = LocalTime.parse(config.startOfWorkingDay());
         endOfWorkingDay = LocalTime.parse(config.endOfWorkingDay());
-        durationOfDay = Duration.between(startOfWorkingDay, endOfWorkingDay).toMinutes();
+        durationOfDay = Duration.between(startOfWorkingDay, endOfWorkingDay).toMinutes() * 3;
         payDeckSystem = new PayDeckSystem(config.payDecksCount());
 
         TicketsGenerationStrategy ticketsStrategy;
