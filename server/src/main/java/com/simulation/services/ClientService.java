@@ -15,7 +15,7 @@ public class ClientService {
         String clientId = creationEvent.getCreatedClient().getId();
         String chosenPayDeckId = creationEvent.getChoosedPaydeck().getId();
         ClientCreatedDto clientCreatedDto = new ClientCreatedDto(clientId, chosenPayDeckId);
-        System.out.println("Created Client Message");
+        System.out.println("Created Client Message " + clientCreatedDto);
         messagingTemplate.convertAndSend("/topic/client-created", clientCreatedDto);
     }
 }

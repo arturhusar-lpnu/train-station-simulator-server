@@ -20,12 +20,12 @@ public class CrashPayDeckGenerator {
 
     public void startCrashes() {
         crashThread = new ScheduledThreadPoolExecutor(1);
-        crashThread.scheduleAtFixedRate(this::crashRandomDeck, 0, 120, TimeUnit.SECONDS);
+        crashThread.schedule(this::crashRandomDeck, 0, TimeUnit.SECONDS);
     }
 
     private void crashRandomDeck() {
         Random rand = new Random();
-        if(rand.nextDouble() >= crashProbability) {
+        if(rand.nextDouble() <= crashProbability) {
             scheduleNextCrash();// startAgain
             return;
         }
@@ -53,7 +53,7 @@ public class CrashPayDeckGenerator {
 
     private void scheduleNextCrash() {
         Random rand = new Random();
-        int newCrashTime = rand.nextInt(0, 10) + 30;
+        int newCrashTime = rand.nextInt(20, 60) + 100;
         crashThread.schedule(this::crashRandomDeck, newCrashTime, TimeUnit.SECONDS);
     }
 
