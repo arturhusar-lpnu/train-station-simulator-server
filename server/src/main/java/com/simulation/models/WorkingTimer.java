@@ -32,8 +32,8 @@ public class WorkingTimer {
                                                 .stream()
                                                 .map(PayDeck::getId)
                                                 .toList();
-
-        StartSystemEvent startSystemEvent = new StartSystemEvent(LocalDateTime.now(), payDeckIds);
+        String reservedPayDeckId = ticketSystem.getPayDeckSystem().getReservedPayDeck().getId();
+        StartSystemEvent startSystemEvent = new StartSystemEvent(LocalDateTime.now(), payDeckIds, reservedPayDeckId);
         simulationEventsService.sendSimulationStartedEvent(startSystemEvent);
     }
 
