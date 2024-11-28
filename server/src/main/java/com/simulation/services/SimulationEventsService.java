@@ -16,7 +16,11 @@ public class SimulationEventsService {
     }
 
     public void sendSimulationStartedEvent(StartSystemEvent startSystemEvent) {
-        SystemStartDto systemStartDto = new SystemStartDto(startSystemEvent.getStartTime(), startSystemEvent.getPayDeckIds());
+        SystemStartDto systemStartDto =
+                new SystemStartDto(
+                        startSystemEvent.getStartTime(),
+                        startSystemEvent.getPayDeckIds(),
+                        startSystemEvent.getReservedPayDackId());
         messagingTemplate.convertAndSend("/topic/simulation-started", systemStartDto);
     }
 

@@ -10,10 +10,12 @@ import java.util.List;
 public class StartSystemEvent implements Event {
     private final List<String> payDeckIds;
     private final LocalDateTime startTime;
+    private final String reservedPayDackId;
 
-    public StartSystemEvent(LocalDateTime startTime, List<String> payDeckIds) {
+    public StartSystemEvent(LocalDateTime startTime, List<String> payDeckIds, String reservedPayDackId) {
         this.payDeckIds = payDeckIds;
         this.startTime = startTime;
+        this.reservedPayDackId = reservedPayDackId;
     }
 
     @Override
