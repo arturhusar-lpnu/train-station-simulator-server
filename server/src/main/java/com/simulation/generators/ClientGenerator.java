@@ -39,7 +39,8 @@ public class ClientGenerator {
         var ticketSystem = TicketSystem.getInstance();
         var payDecks = ticketSystem.getPayDeckSystem().getPayDecks();
         System.out.println("Generating clients");
-        if(clients.size() >= payDecks.size()) {
+        if(clients.size() >= payDecks.size() * 3) {
+            scheduleNextClient();
             return;
         }
 
@@ -58,9 +59,10 @@ public class ClientGenerator {
         CreationEvent creationEvent = new CreationEvent(client, LocalDateTime.now(), selectedPayDeck);
         clientService.sendClientCreatedEvent(creationEvent);
 
-        scheduler.schedule(this::generateClient,
-                timeGenerationStrategy.getNextGenerationDelay(),
-                TimeUnit.SECONDS);
+        scheduleNextClient();
+        // scheduler.schedule(this::generateClient,
+        //         timeGenerationStrategy.getNextGenerationDelay(),
+        //         TimeUnit.SECONDS);
     }
 
     public void startGenerateClients() {
@@ -70,7 +72,11 @@ public class ClientGenerator {
                 timeGenerationStrategy.getNextGenerationDelay(),
                 TimeUnit.SECONDS);
     }
-
+    private void scheduleNextClient() {
+        scheduler.schedule(this::generateClient,
+                timeGenerationStrategy.getNextGenerationDelay(),
+                TimeUnit.SECONDS);
+    }
     public void stopGenerateClients() {
         scheduler.shutdownNow();
     }
