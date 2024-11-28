@@ -21,11 +21,11 @@ public class ServeClientTask implements Runnable {
     @Override
     public void run() {
         if(!payDeck.getClientsQueue().contains(client)) {
-            return;
+            return; //Add event later
         }
 
         try {
-            long servingTime = client.getTicketsToBuy() * 1000L;
+            long servingTime = client.getTicketsToBuy() * 3000L;
             ServiceEvent serviceEvent = new ServiceEvent(payDeck.getId(), servingTime);
             serveClientService.sendServiceEvent(serviceEvent);
 
@@ -36,10 +36,7 @@ public class ServeClientTask implements Runnable {
             serveClientService.sendEndedServicingEvent(serviceEvent);
         } catch (InterruptedException e) {
             System.out.println("Task interrupted for PayDeck: " + payDeck.getId());
-            payDeck.crash();
             client.interrupt();
-            CrashPaydeckEvent crashPaydeckEvent = new CrashPaydeckEvent(payDeck, client, LocalDateTime.now());
-            serveClientService.sendInterruptedServing(crashPaydeckEvent);
         }
     }
 }

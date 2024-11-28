@@ -8,18 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-//@Component
-//public class ServiceWebListener extends WebListener{
-//    public ServiceWebListener(SimpMessagingTemplate messagingTemplate) {
-//        super(messagingTemplate);
-//    }
-//    @Override
-//    public void update(Event event) {
-//        if(event instanceof ServiceEvent) {
-//            messagingTemplate.convertAndSend("/topic/pay-decks/service", event);
-//        }
-//    }
-//}
 @RequiredArgsConstructor
 @Service
 public class ServeClientService {
@@ -33,16 +21,12 @@ public class ServeClientService {
         messagingTemplate.convertAndSend("/topic/stoped-serving-client", serviceEvent);
     }
 
-    public void sendInterruptedServing(CrashPaydeckEvent interuptedEvent) {
-        messagingTemplate.convertAndSend("/topic/pay-deck-crush", interuptedEvent);
-
+    public void sendCrashedDecks(CrashPaydeckEvent crushedEvent) {// crushed and reserved pay decks
+        messagingTemplate.convertAndSend("/topic/pay-deck-crush", crushedEvent);
     }
 
     public void sendModifiedQueueEvent(ModifiedQueueEvent modifiedQueueEvent) {
+        System.out.println("Sent modified queue " + modifiedQueueEvent);
         messagingTemplate.convertAndSend("/topic/modified-queue", modifiedQueueEvent);
-    }
-
-    public void sendRecoveredDeckEvent(RecoveryPaydeckEvent recoveredDeckEvent) {
-        messagingTemplate.convertAndSend("/topic/recovered-deck", recoveredDeckEvent);
     }
 }

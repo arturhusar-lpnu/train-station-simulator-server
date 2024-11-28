@@ -1,10 +1,7 @@
-package com.simulation.controllers;
+package com.simulation.services;
 
-import com.simulation.services.ClientService;
-import com.simulation.services.ServeClientService;
-import com.simulation.services.SimulationEventsService;
-import com.simulation.generators.TicketSystem;
-import com.simulation.generators.TicketSystemConfig;
+import com.simulation.models.TicketSystem;
+import com.simulation.config.TicketSystemConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

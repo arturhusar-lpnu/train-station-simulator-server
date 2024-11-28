@@ -10,11 +10,11 @@ import java.time.LocalDateTime;
 public class CrashPaydeckEvent implements Event {
     private final PayDeck crashedPaydeck;
     private final LocalDateTime startTime;
-    private final Client interruptedClient;
+    private final PayDeck reservedPaydeck;
 
-    public CrashPaydeckEvent(PayDeck crashedPaydeck, Client interruptedClient, LocalDateTime startTime) {
+    public CrashPaydeckEvent(PayDeck crashedPaydeck, PayDeck reservedPaydeck, LocalDateTime startTime) {
         this.crashedPaydeck = crashedPaydeck;
-        this.interruptedClient = interruptedClient;
+        this.reservedPaydeck = reservedPaydeck;
         this.startTime = startTime;
     }
 

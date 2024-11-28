@@ -1,28 +1,19 @@
 package com.simulation.generators;
 
-import com.simulation.events.ClientChooseEvent;
 import com.simulation.models.PayDeck;
-import com.simulation.services.ClientService;
-import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class CrashPaydeckGenerator {
+public class CrashPayDeckGenerator {
     private final PayDeckSystem payDeckSystem;
     private final double crashProbability;
     private PayDeck crashedPayDeck;
-    @Setter
-    private ClientService clientService;
     private ScheduledThreadPoolExecutor crashThread;
-    private final ScheduledExecutorService recoveryThread = Executors.newSingleThreadScheduledExecutor();
 
-    public CrashPaydeckGenerator(PayDeckSystem payDeckSystem,  double crashProbability) {
+    public CrashPayDeckGenerator(PayDeckSystem payDeckSystem, double crashProbability) {
         this.payDeckSystem = payDeckSystem;
         this.crashProbability = crashProbability;
     }
@@ -35,34 +26,38 @@ public class CrashPaydeckGenerator {
     private void crashRandomDeck() {
         Random rand = new Random();
         if(rand.nextDouble() >= crashProbability) {
-           return;
+            scheduleNextCrash();// startAgain
+            return;
         }
 
         List<PayDeck> workingPayDecks = new ArrayList<>(payDeckSystem.getPayDecks().stream().filter(PayDeck::isWorking).toList());
 
-        if(workingPayDecks.isEmpty() && crashThread != null && !crashThread.isShutdown()) {
-            crashThread.shutdown();
+        if(workingPayDecks.isEmpty() && !crashThread.isShutdown()) {
+            crashThread.shutdownNow();
         }
 
         int randomIndex = rand.nextInt(workingPayDecks.size());
 
         crashedPayDeck = workingPayDecks.get(randomIndex);
+        System.out.println("Crash created");
         workingPayDecks.remove(crashedPayDeck);
-        payDeckSystem.interruptTask(crashedPayDeck.getId());
+        payDeckSystem.interruptTask(crashedPayDeck);
+
         crashedPayDeck.getClientsQueue().forEach(c -> {
             PayDeck choosedPayDeck = PayDeckChooseSystem.choosePaydeck(workingPayDecks, c);
-            ClientChooseEvent clientChooseEvent = new ClientChooseEvent(c, choosedPayDeck);
-            clientService.sendClientChooseNewDeckEvent(clientChooseEvent);
+            choosedPayDeck.addClient(c);
         });
-        int recoveryTime = rand.nextInt(0, 10) + 30;
-        recoveryThread.schedule(this::recoverPayDeck, recoveryTime, TimeUnit.SECONDS);
+
+        scheduleNextCrash();
     }
 
-    private void recoverPayDeck() {
-        crashedPayDeck.recover();
-        payDeckSystem.setRecoveredPayDeck(crashedPayDeck);
+    private void scheduleNextCrash() {
+        Random rand = new Random();
+        int newCrashTime = rand.nextInt(0, 10) + 30;
+        crashThread.schedule(this::crashRandomDeck, newCrashTime, TimeUnit.SECONDS);
     }
+
     public void stopCrashes() {
-        crashThread.shutdown();
+        crashThread.shutdownNow();
     }
 }

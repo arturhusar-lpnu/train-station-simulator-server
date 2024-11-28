@@ -1,5 +1,6 @@
 package com.simulation.generators;
 
+import com.simulation.models.TicketSystem;
 import com.simulation.services.ClientService;
 import com.simulation.events.CreationEvent;
 import lombok.Setter;
@@ -17,9 +18,6 @@ import java.util.concurrent.TimeUnit;
 
 // delay поставив в секундах, подумайте, чи норм, чи забрати і в мілісекундах]
 
-// baawls nibber
-// baaaaaaaaaaaawls
-//
 @Setter
 public class ClientGenerator {
     private List<Client> clients;
@@ -80,9 +78,6 @@ public class ClientGenerator {
         scheduler.shutdownNow();
     }
 
-    public List<Client> getClients() {
-        return new ArrayList<>(clients);
-    }
     public Client getClientByID(String clientId) {
         return clients.stream().filter(c -> c.getId().equals(clientId)).findFirst().orElse(null);
     }

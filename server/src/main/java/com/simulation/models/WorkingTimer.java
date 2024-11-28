@@ -3,7 +3,6 @@ package com.simulation.models;
 import com.simulation.services.SimulationEventsService;
 import com.simulation.events.EndSystemEvent;
 import com.simulation.events.StartSystemEvent;
-import com.simulation.generators.TicketSystem;
 import lombok.Setter;
 
 import java.time.LocalDateTime;

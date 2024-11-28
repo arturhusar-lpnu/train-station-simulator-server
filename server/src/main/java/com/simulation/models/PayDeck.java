@@ -31,20 +31,9 @@ public class PayDeck {
         this.serveClientService = serveClientService;
     }
 
-    public void crash() {
-        isWorking = false;
-    }
-    public void recover() {
-        isWorking = true;
-    }
-
     public void addClient(Client client) {
         clientsQueue.offer(client);
         ModifiedQueueEvent modifiedQueueEvent = new ModifiedQueueEvent(this);
         serveClientService.sendModifiedQueueEvent(modifiedQueueEvent);
-    }
-
-    public int getQueueSize() {
-        return clientsQueue.size();
     }
 }
