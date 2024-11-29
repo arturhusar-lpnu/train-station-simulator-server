@@ -15,5 +15,7 @@ public class StationRoom {
 
     private List<Position> entries;
     private List<Position> exits;
+
+    private List<List<Integer>> map;
 }
 
