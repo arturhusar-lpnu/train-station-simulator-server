@@ -20,7 +20,7 @@ public class CrashPayDeckGenerator {
 
     public void startCrashes() {
         crashThread = new ScheduledThreadPoolExecutor(1);
-        crashThread.schedule(this::crashRandomDeck, 0, TimeUnit.SECONDS);
+        crashThread.schedule(this::crashRandomDeck, 30, TimeUnit.SECONDS);
     }
 
     private void crashRandomDeck() {
