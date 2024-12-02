@@ -3,6 +3,7 @@ package com.simulation.generators;
 import com.simulation.models.TicketSystem;
 import com.simulation.services.ClientService;
 import com.simulation.events.CreationEvent;
+import lombok.Getter;
 import lombok.Setter;
 import com.simulation.models.Client;
 import com.simulation.models.PayDeck;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 // delay поставив в секундах, подумайте, чи норм, чи забрати і в мілісекундах]
 
 @Setter
+@Getter
 public class ClientGenerator {
     private List<Client> clients;
     private TimeGenerationStrategy timeGenerationStrategy;
@@ -39,7 +41,8 @@ public class ClientGenerator {
         var ticketSystem = TicketSystem.getInstance();
         var payDecks = ticketSystem.getPayDeckSystem().getPayDecks();
         System.out.println("Generating clients");
-        if(clients.size() >= payDecks.size()) {
+        if(clients.size() >= payDecks.size() * 20) {
+            //scheduleNextGeneration();
             return;
         }
 
@@ -58,20 +61,27 @@ public class ClientGenerator {
         CreationEvent creationEvent = new CreationEvent(client, LocalDateTime.now(), selectedPayDeck);
         clientService.sendClientCreatedEvent(creationEvent);
 
+        scheduleNextGeneration();
+    }
+
+    private void scheduleNextGeneration() {
         scheduler.schedule(this::generateClient,
                 timeGenerationStrategy.getNextGenerationDelay(),
                 TimeUnit.SECONDS);
     }
+
 
     public void startGenerateClients() {
         scheduler = new ScheduledThreadPoolExecutor(1);
         System.out.println("Scheduled");
-        scheduler.schedule(this::generateClient,
-                timeGenerationStrategy.getNextGenerationDelay(),
-                TimeUnit.SECONDS);
+        scheduleNextGeneration();
+//        scheduler.schedule(this::generateClient,
+//                timeGenerationStrategy.getNextGenerationDelay(),
+//                TimeUnit.SECONDS);
     }
 
     public void stopGenerateClients() {
+        clients = new ArrayList<>();
         scheduler.shutdownNow();
     }
 
